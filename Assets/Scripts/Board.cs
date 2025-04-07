@@ -6,12 +6,9 @@ public class Board : MonoBehaviour
     public Transform cards;
     public GameObject card;
 
-
-    List<int> cardCnt = new();
-
     void Start()
     {
-        int[] arr = CreateCard(8);
+        int[] arr = CreateCard(8);  // {0,0,1,1, ...,7,7};
 
         arr = arr.OrderBy(x => Random.Range(0, arr.Last())).ToArray();
 

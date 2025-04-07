@@ -445,8 +445,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1002514540}
-  - component: {fileID: 1002514539}
   - component: {fileID: 1002514538}
+  - component: {fileID: 1002514539}
   - component: {fileID: 1002514537}
   m_Layer: 0
   m_Name: AudioManager
