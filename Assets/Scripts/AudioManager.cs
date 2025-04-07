@@ -1,5 +1,16 @@
 using UnityEngine;
 using System.Collections.Generic;
+
+public enum BGM
+{
+    Main,       //StartScene BGM
+    InGame    //InGame BGM
+}
+public enum SFX
+{
+    Flip,       //카드 뒤집을때 Sound
+    Match,   //카드 매치시 Sound
+}
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
@@ -10,7 +21,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioSource bgmPlayer;
     [SerializeField] AudioSource sfxPlayer;
 
-    private void Awake()
+    void Awake()
     {
         if (Instance == null)
         {
@@ -20,25 +31,19 @@ public class AudioManager : MonoBehaviour
         else if (Instance != this)
             Destroy(gameObject);
     }
-    void Start()
+    public void ChangeBGM(BGM _index)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void ChangeBGM(int _index)
-    {
-        bgmPlayer.clip = bgmClips[_index];
+        bgmPlayer.clip = bgmClips[(int)_index];
         sfxPlayer.Play();
     }
 
-    public void PlaySFX(int _index)
+    public void PlaySFX(SFX _index)
     {
-        sfxPlayer.PlayOneShot(sfxClips[_index]);
+        sfxPlayer.PlayOneShot(sfxClips[(int)_index]);
+    }
+
+    public void ChangeVolume(float _vol)
+    {
+        bgmPlayer.volume = _vol;
     }
 }

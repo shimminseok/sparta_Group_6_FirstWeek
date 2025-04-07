@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
                 endTxt.gameObject.SetActive(true);
                 Time.timeScale = 0;
             }
-            AudioManager.Instance.PlaySFX(1);
+            AudioManager.Instance.PlaySFX(SFX.Match);
         }
         else
         {

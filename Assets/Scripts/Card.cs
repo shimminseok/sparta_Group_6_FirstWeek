@@ -19,7 +19,7 @@ public class Card : MonoBehaviour
         front.SetActive(true);
         back.SetActive(false);
 
-        AudioManager.Instance.PlaySFX(0);
+        AudioManager.Instance.PlaySFX(SFX.Flip);
         if (GameManager.Instance.firstCard == null)
         {
             GameManager.Instance.firstCard = this;
