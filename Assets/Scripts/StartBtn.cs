@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestBranch : MonoBehaviour
+public class StartBtn : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] GameObject selectLevelObj;
     void Start()
     {
         
@@ -14,5 +14,10 @@ public class TestBranch : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void OnClickStartBtn()
+    {
+        selectLevelObj.SetActive(true);
     }
 }

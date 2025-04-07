@@ -68,4 +68,9 @@ public class GameManager : MonoBehaviour
         endTxt.gameObject.SetActive(true);
         Time.timeScale = 0;
     }
+
+    private void OnApplicationQuit()
+    {
+        PlayerPrefs.SetInt("ClearLevel", (int)LevelManager.Instance.selectedLevel);
+    }
 }
