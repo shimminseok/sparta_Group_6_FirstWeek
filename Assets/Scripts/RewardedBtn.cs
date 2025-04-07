@@ -64,6 +64,7 @@ public class RewardedBtn : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowLi
             Debug.Log("Unity Ads Rewarded Ad Completed");
             // Grant a reward.
             LoadAd();
+            LevelManager.Instance.LevelUp();
             SceneManager.LoadScene("SampleScene");
         }
     }

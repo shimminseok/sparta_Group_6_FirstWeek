@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviour
             {
                 endTxt.gameObject.SetActive(true);
                 Time.timeScale = 0;
+                PlayerPrefs.SetInt("ClearLevel", (int)LevelManager.Instance.selectedLevel);
             }
             AudioManager.Instance.PlaySFX(SFX.Match);
         }
@@ -67,5 +68,9 @@ public class GameManager : MonoBehaviour
         endTxt.text = "Game Over";
         endTxt.gameObject.SetActive(true);
         Time.timeScale = 0;
+    }
+
+    private void OnApplicationQuit()
+    {
     }
 }
