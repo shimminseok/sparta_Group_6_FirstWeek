@@ -20,9 +20,6 @@ public class Board : MonoBehaviour
             float y = (i / 4) * 1.4f;
             go.transform.localPosition = new Vector2(x, y);
 
-            float x = (i % 3) * 1.4f;
-            float y = (i / 3) * 1.4f ;
-            go.transform.localPosition = new Vector2(x, y);
             go.GetComponent<Card>().Setting(arr[i]);
         }
 
