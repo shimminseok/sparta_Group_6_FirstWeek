@@ -6,9 +6,6 @@ public class Board : MonoBehaviour
     public Transform cards;
     public GameObject card;
 
-
-    List<int> cardCnt = new();
-
     void Start()
     {
         int[] arr = CreateCard(8);
