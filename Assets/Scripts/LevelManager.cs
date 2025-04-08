@@ -32,11 +32,11 @@ public class LevelManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        selectedLevel = (Level)PlayerPrefs.GetInt("ClearLevel",0);
+        //selectedLevel = (Level)PlayerPrefs.GetInt("ClearLevel",0);
 
         for (int i = 0; i <= (int)selectedLevel; i++)
         {
-            levelUPSlots[i].OpenCard();
+            levelUPSlots[i]?.OpenCard();
         }
     }
     public void OnClickLevel(int _level)
