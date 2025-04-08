@@ -7,13 +7,17 @@ public class Board : MonoBehaviour
     public Transform cards;
     public GameObject card;
 
+    public GameObject board;
+
     void Awake()
     {
         
     }
     void Start()
     {
-        int[] arr = CreateCard(LevelManager.Instance.GetCardCount());  // {0,0,1,1, ...,7,7};
+        int level = LevelManager.Instance.GetCardCount();
+
+        int[] arr = CreateCard(LevelManager.Instance.GetCardCount());  // {0,0,1,1, ...,9,9};
 
         arr = arr.OrderBy(x => Random.Range(0, arr.Last())).ToArray();
 
@@ -21,12 +25,27 @@ public class Board : MonoBehaviour
         {
             GameObject go = Instantiate(card, cards);
             
-            // 4 * 4
-
-            float x = (i % 9) * 1.4f;
-            float y = (i / 9) * 1.4f ;
+            float x = (i % level) * 1.6f;
+            float y = (i / level) * 2.6f;
             go.transform.localPosition = new Vector2(x, y);
             go.GetComponent<Card>().Setting(arr[i]);
+
+            //level에 따른 board의 position.x 변경
+            float boardPosX = 0;
+            if(level == 9)
+            {
+                boardPosX = -4.3f;
+            }
+            else if(level == 6)
+            {
+                boardPosX = -1.9f;
+            }
+            else if(level == 3)
+            {
+                boardPosX = 0.5f;
+            }
+
+            board.transform.localPosition = new Vector3(boardPosX, 0.6f, 0f);
 
         }
         GameManager.Instance.cardCount = arr.Length;
