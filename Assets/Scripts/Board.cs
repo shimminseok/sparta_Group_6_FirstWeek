@@ -25,8 +25,8 @@ public class Board : MonoBehaviour
         {
             GameObject go = Instantiate(card, cards);
             
-            float x = (i % level) * 1.6f;
-            float y = (i / level) * 2.6f;
+            float x = (i % level) * 1.8f;
+            float y = (i / level) * 2.8f;
             go.transform.localPosition = new Vector2(x, y);
             go.GetComponent<Card>().Setting(arr[i]);
 
@@ -34,15 +34,15 @@ public class Board : MonoBehaviour
             float boardPosX = 0;
             if(level == 9)
             {
-                boardPosX = -4.3f;
+                boardPosX = -5.0f;
             }
             else if(level == 6)
             {
-                boardPosX = -1.9f;
+                boardPosX = -2.3f;
             }
             else if(level == 3)
             {
-                boardPosX = 0.5f;
+                boardPosX = 0.3f;
             }
 
             board.transform.localPosition = new Vector3(boardPosX, 0.6f, 0f);
