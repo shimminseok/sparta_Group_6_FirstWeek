@@ -10,7 +10,7 @@ public class Card : MonoBehaviour
     public void Setting(int _num)
     {
         idx = _num;
-        frontImg.sprite = Resources.Load<Sprite>($"rtan{idx}");
+        frontImg.sprite = Resources.Load<Sprite>($"mon{idx}");  //스프라이트 이름 rtan -> mon 으로 변경했습니다.
     }
 
     public void OpenCard()
