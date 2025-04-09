@@ -1041,8 +1041,7 @@ MonoBehaviour:
   - {fileID: 1664340959}
   - {fileID: 1238271507}
   - {fileID: 1824868600}
-  cardCountArray: 030000000600000009000000
-  selectedLevel: 0
+  selectedLevel: 3
 --- !u!1 &1238271502
 GameObject:
   m_ObjectHideFlags: 0

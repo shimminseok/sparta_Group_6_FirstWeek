@@ -18,7 +18,7 @@ public class LevelManager : MonoBehaviour
 
     
     public List<UILevelSlot> levelUPSlots = new List<UILevelSlot>();
-    public int[] cardCountArray = new int[3] { 3, 6, 9};
+    int[] CardCountArray = new int[4] { 3, 6, 9, 12};
 
     
     public Level selectedLevel = Level.MBTI;
@@ -38,7 +38,7 @@ public class LevelManager : MonoBehaviour
 
         //selectedLevel = (Level)PlayerPrefs.GetInt("ClearLevel",0);
 
-        for (int i = 0; i <= (int)selectedLevel; i++)
+        for (int i = 0; i < (int)selectedLevel; i++)
         {
             levelUPSlots[i]?.OpenCard();
         }
@@ -50,7 +50,7 @@ public class LevelManager : MonoBehaviour
     }
     public int GetCardCount()
     {
-        return cardCountArray[(int)selectedLevel];
+        return CardCountArray[(int)selectedLevel];
     }
 
     public void LevelUp()

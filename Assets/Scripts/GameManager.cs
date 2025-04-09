@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public Card secondCard;
 
     public int cardCount = 0;
-    public int hiddenConditionCnt = 5;
+    public int hiddenConditionCnt = 1;
     public int feiledMatchCnt = 0;
 
     float time = 0f;
@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
                 time = 35;
                 break;
             case Level.Resolution:
+            case Level.Hidden:
                 time = 40f;
                 break;
         }
@@ -49,13 +50,13 @@ public class GameManager : MonoBehaviour
     void Update()
     { 
 
-        time -= Time.deltaTime;
+        time -= Time.deltaTime * (LevelManager.Instance.selectedLevel == Level.Hidden ? 2 : 1);
 
         if(time <= 10f && !isFirstWaring)
         {
             timeTxt.color = Color.red;
             isFirstWaring = true;
-            //timeAnimator.SetTrigger("Warning");
+            timeAnimator.gameObject.SetActive(true);
         }
 
         if (time <= 0)
@@ -81,13 +82,14 @@ public class GameManager : MonoBehaviour
                 Invoke(nameof(ClearGame), 1f);
             }
             AudioManager.Instance.PlaySFX(SFX.Match);
+            feiledMatchCnt = 0;
         }
         else
         {
             firstCard.CloseCard();
             secondCard.CloseCard();
             feiledMatchCnt++;
-            if(feiledMatchCnt == hiddenConditionCnt)
+            if (feiledMatchCnt == hiddenConditionCnt && LevelManager.Instance.selectedLevel != Level.Hidden)
             {
                 //히든스테이지 입장
                 StartCoroutine(EnterHiddenStage());
@@ -116,6 +118,7 @@ public class GameManager : MonoBehaviour
     IEnumerator EnterHiddenStage()
     {
         yield return new WaitForSeconds(3f);
+        Debug.Log("히든 스테이지 입장");
         LevelManager.Instance.OnClickLevel((int)Level.Hidden);
     }
 }

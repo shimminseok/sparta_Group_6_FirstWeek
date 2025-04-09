@@ -157,7 +157,9 @@ MonoBehaviour:
   firstCard: {fileID: 0}
   secondCard: {fileID: 0}
   cardCount: 0
-  timeAnimator: {fileID: 0}
+  hiddenConditionCnt: 1
+  feiledMatchCnt: 0
+  timeAnimator: {fileID: 454021916}
 --- !u!4 &212220230
 Transform:
   m_ObjectHideFlags: 0
@@ -1383,8 +1385,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  cardCountArray: 030000000600000009000000
-  selectedLevel: 1
+  selectedLevel: 3
 --- !u!4 &2069120953
 Transform:
   m_ObjectHideFlags: 0

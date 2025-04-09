@@ -6,7 +6,7 @@ using System;
 public enum BGM
 {
     Main,       //StartScene BGM
-    InGame    //InGame BGM
+    InGame,    //InGame BGM
 }
 public enum SFX
 {
@@ -36,7 +36,6 @@ public class AudioManager : MonoBehaviour
     public void ChangeBGM(BGM _index)
     {
         bgmPlayer.clip = bgmClips[(int)_index];
-        sfxPlayer.Play();
     }
 
     public void PlaySFX(SFX _index)
