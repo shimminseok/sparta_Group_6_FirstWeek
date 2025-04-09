@@ -26,27 +26,23 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        int level = LevelManager.Instance.GetCardCount();
-
         time += Time.deltaTime;
         timeTxt.text = time.ToString("N2");
 
         //레벨에 따른 타임아웃 시간 변경
-        if(level == 3 && time >= 30f)
+        if(LevelManager.Instance.selectedLevel == Level.MBTI && time >= 30f)
         {
             time = 30f;
-            EndGame();
         }
-        else if(level == 6 && time >= 35f)
+        else if(LevelManager.Instance.selectedLevel == Level.Reason && time >= 35f)
         {
             time = 35f;
-            EndGame();
         }
-        else if(level == 9 && time >= 40f)
+        else if(LevelManager.Instance.selectedLevel == Level.Resolution && time >= 40f)
         {
             time = 40f;
-            EndGame();
         }
+        EndGame();
     }
 
     public void isMatched()

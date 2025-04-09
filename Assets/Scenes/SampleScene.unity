@@ -1036,7 +1036,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   cardCountArray: 030000000600000009000000
-  selectedLevel: 0
+  selectedLevel: 1
 --- !u!4 &2069120953
 Transform:
   m_ObjectHideFlags: 0
