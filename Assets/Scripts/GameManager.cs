@@ -1,3 +1,4 @@
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -11,12 +12,11 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public Card secondCard;
     public int cardCount = 0;
 
-    float previousTime = 0f;
     float time = 0f;
-    float gameTimer;
 
     // 경고 애니메이션 트리거용 애니메이터
     [SerializeField] Animator timeAnimator;
+    bool isFirstWaring;
 
     private void Awake()
     {
@@ -29,13 +29,13 @@ public class GameManager : MonoBehaviour
         switch(LevelManager.Instance.selectedLevel)
         {
             case Level.MBTI:
-                gameTimer = 30f;
+                time = 30f;
                 break;
             case Level.Reason:
-                gameTimer = 35;
+                time = 35;
                 break;
             case Level.Resolution:
-                gameTimer = 40f;
+                time = 40f;
                 break;
         }
 
@@ -45,20 +45,26 @@ public class GameManager : MonoBehaviour
     void Update()
     { 
 
-        time += Time.deltaTime;
-        timeTxt.text = time.ToString("N2");
-
-
+        time -= Time.deltaTime;
         // 남은 시간이 10초 이하로 처음 진입할 때 경고 애니메이션 실행
-        if (previousTime < gameTimer - 10f && time >= gameTimer - 10f)
+
+        //if (previousTime < gameTimer - 10f && time >= gameTimer - 10f)
+        //{
+        //    timeAnimator.SetTrigger("Warning");
+        //}
+
+        if(time <= 10f && !isFirstWaring)
         {
-            timeAnimator.SetTrigger("Warning");
+            timeTxt.color = Color.red;
+            isFirstWaring = true;
+            //timeAnimator.SetTrigger("Warning");
         }
 
-        if (time >= gameTimer)
+        if (time <= 0)
         {
             EndGame();
         }
+        timeTxt.text = time.ToString("N2");
     }
 
     public void isMatched()
@@ -93,7 +99,7 @@ public class GameManager : MonoBehaviour
     {
         endTxt.text = "Game Over";
         endTxt.gameObject.SetActive(true);
-        time = gameTimer;
+        time = 0;
         Time.timeScale = 0;
     }
 }
