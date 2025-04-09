@@ -57,7 +57,6 @@ public class Card : MonoBehaviour
     {
         yield return new WaitForSeconds(_time);
 
-
         DestoryCardInvoke();
     }
 
