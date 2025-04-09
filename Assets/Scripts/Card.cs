@@ -16,10 +16,11 @@ public class Card : MonoBehaviour
     [SerializeField] Vector2 OpenCardOffset = new Vector2();
     [SerializeField] AnimationCurve animationCurve;
 
-    public void Setting(int _num)
+    public void Setting(int _num, Vector2 _endPos)
     {
         idx = _num;
         frontImg.sprite = Resources.Load<Sprite>($"mon{idx}");  //스프라이트 이름 rtan -> mon 으로 변경했습니다.
+        StartCoroutine(MoveCard(transform.localPosition, _endPos));
     }
 
     public void OpenCard()
@@ -75,9 +76,6 @@ public class Card : MonoBehaviour
     {
         Vector2 start = transform.localPosition;
         Vector2 endPos = start + OpenCardOffset;
-
-        Quaternion startRot = transform.localRotation;        
-        Quaternion endRot = transform.localRotation * Quaternion.Euler(new Vector3(0,90,0));   
         yield return MoveCard(start, endPos);
 
         front.SetActive(true);

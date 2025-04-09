@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,7 +11,10 @@ public class GameManager : MonoBehaviour
     public Text endTxt;
     [HideInInspector] public Card firstCard;
     [HideInInspector] public Card secondCard;
+
     public int cardCount = 0;
+    public int hiddenConditionCnt = 5;
+    public int feiledMatchCnt = 0;
 
     float time = 0f;
 
@@ -82,6 +86,12 @@ public class GameManager : MonoBehaviour
         {
             firstCard.CloseCard();
             secondCard.CloseCard();
+            feiledMatchCnt++;
+            if(feiledMatchCnt == hiddenConditionCnt)
+            {
+                //히든스테이지 입장
+                StartCoroutine(EnterHiddenStage());
+            }
         }
 
         firstCard = null;
@@ -101,5 +111,11 @@ public class GameManager : MonoBehaviour
         endTxt.gameObject.SetActive(true);
         Time.timeScale = 0;
         PlayerPrefs.SetInt("ClearLevel", (int)LevelManager.Instance.selectedLevel);
+    }
+
+    IEnumerator EnterHiddenStage()
+    {
+        yield return new WaitForSeconds(3f);
+        LevelManager.Instance.OnClickLevel((int)Level.Hidden);
     }
 }

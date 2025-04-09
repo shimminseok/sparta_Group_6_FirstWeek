@@ -157,6 +157,8 @@ MonoBehaviour:
   firstCard: {fileID: 0}
   secondCard: {fileID: 0}
   cardCount: 0
+  hiddenConditionCnt: 5
+  feiledMatchCnt: 0
   timeAnimator: {fileID: 0}
 --- !u!4 &212220230
 Transform:

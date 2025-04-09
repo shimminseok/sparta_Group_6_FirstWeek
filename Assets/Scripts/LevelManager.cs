@@ -9,7 +9,8 @@ public enum Level
 {
     MBTI,
     Reason,
-    Resolution
+    Resolution,
+    Hidden
 }
 public class LevelManager : MonoBehaviour
 {

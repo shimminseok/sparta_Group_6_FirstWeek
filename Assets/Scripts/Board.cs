@@ -1,7 +1,9 @@
 using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEditor;
+using Unity.Burst.Intrinsics;
 public class Board : MonoBehaviour
 {
     public Transform cards;
@@ -21,15 +23,6 @@ public class Board : MonoBehaviour
 
         arr = arr.OrderBy(x => Random.Range(0, arr.Last())).ToArray();
 
-        for (int i = 0; i < arr.Length; i++)
-        {
-            GameObject go = Instantiate(card, cards);
-            
-            float x = (i % level) * 1.8f;
-            float y = (i / level) * 2.8f;
-            go.transform.localPosition = new Vector2(x, y);
-            go.GetComponent<Card>().Setting(arr[i]);
-        }
 
         //level에 따른 board의 position.x 변경
         float boardPosX = 0;
@@ -47,6 +40,8 @@ public class Board : MonoBehaviour
         }
         board.transform.localPosition = new Vector3(boardPosX, 0.6f, 0f);
 
+        StartCoroutine(Card(arr, level));
+
         GameManager.Instance.cardCount = arr.Length;
     }
 
@@ -61,5 +56,18 @@ public class Board : MonoBehaviour
         }
 
         return arr;
+    }
+
+    IEnumerator Card(int[] _arr, int _level)
+    {
+        for (int i = 0; i < _arr.Length; i++)
+        {
+            GameObject go = Instantiate(card, cards);
+            go.transform.localPosition = new Vector2(6.4f, 2.4f);
+            float x = (i % _level) * 1.8f;
+            float y = (i / _level) * 2.8f;
+            go.GetComponent<Card>().Setting(_arr[i], new Vector2(x, y));
+            yield return new WaitForSeconds(0.1f);
+        }
     }
 }
