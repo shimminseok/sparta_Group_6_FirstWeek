@@ -12,37 +12,55 @@ public class GameManager : MonoBehaviour
     public int cardCount = 0;
 
     float time = 0f;
-
+    float gameTimer;
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
             Instance = this;
     }
     void Start()
     {
         Time.timeScale = 1;
+        switch(LevelManager.Instance.selectedLevel)
+        {
+            case Level.MBTI:
+                gameTimer = 30f;
+                break;
+            case Level.Reason:
+                gameTimer = 35;
+                break;
+            case Level.Resolution:
+                gameTimer = 40f;
+                break;
+        }
+
     }
 
     // Update is called once per frame
     void Update()
-    {
+    { 
+
         time += Time.deltaTime;
         timeTxt.text = time.ToString("N2");
 
         //레벨에 따른 타임아웃 시간 변경
-        if(LevelManager.Instance.selectedLevel == Level.MBTI && time >= 30f)
+        if(time < gameTimer)
         {
-            time = 30f;
+            if (LevelManager.Instance.selectedLevel == Level.MBTI)
+            {
+                time = 30f;
+            }
+            else if (LevelManager.Instance.selectedLevel == Level.Resolution)
+            {
+                time = 35f;
+            }
+            else if (LevelManager.Instance.selectedLevel == Level.Resolution)
+            {
+                time = 40f;
+            }
         }
-        else if(LevelManager.Instance.selectedLevel == Level.Reason && time >= 35f)
-        {
-            time = 35f;
-        }
-        else if(LevelManager.Instance.selectedLevel == Level.Resolution && time >= 40f)
-        {
-            time = 40f;
-        }
-        EndGame();
+        else
+            EndGame();
     }
 
     public void isMatched()
@@ -55,7 +73,7 @@ public class GameManager : MonoBehaviour
 
             cardCount -= 2;
 
-            if(cardCount == 0)
+            if (cardCount == 0)
             {
                 endTxt.gameObject.SetActive(true);
                 Time.timeScale = 0;
@@ -78,9 +96,5 @@ public class GameManager : MonoBehaviour
         endTxt.text = "Game Over";
         endTxt.gameObject.SetActive(true);
         Time.timeScale = 0;
-    }
-
-    private void OnApplicationQuit()
-    {
     }
 }
