@@ -11,8 +11,13 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public Card secondCard;
     public int cardCount = 0;
 
+    float previousTime = 0f;
     float time = 0f;
     float gameTimer;
+
+    // 경고 애니메이션 트리거용 애니메이터
+    [SerializeField] Animator timeAnimator;
+
     private void Awake()
     {
         if (Instance == null)
@@ -44,13 +49,13 @@ public class GameManager : MonoBehaviour
         timeTxt.text = time.ToString("N2");
 
 
-//        // 남은 시간이 10초 이하로 처음 진입할 때 경고 애니메이션 실행
-//        if (previousTime < gameTimer - 10f && time >= gameTimer - 10f)
-//        {
-//            timeAnimator.SetTrigger("Warning");
-//        }
+        // 남은 시간이 10초 이하로 처음 진입할 때 경고 애니메이션 실행
+        if (previousTime < gameTimer - 10f && time >= gameTimer - 10f)
+        {
+            timeAnimator.SetTrigger("Warning");
+        }
 
-        if(time >= gameTimer)
+        if (time >= gameTimer)
         {
             EndGame();
         }
