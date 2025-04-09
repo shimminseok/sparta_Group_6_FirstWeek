@@ -39,7 +39,7 @@ public class AudioManager : MonoBehaviour
     public void ChangeBGM(BGM _index)
     {
         bgmPlayer.clip = bgmClips[(int)_index];
-        bgmPlayer.Play();
+        sfxPlayer.Play();
     }
 
     public void PlaySFX(SFX _index)
