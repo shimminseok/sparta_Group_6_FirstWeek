@@ -1,4 +1,3 @@
-using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -6,6 +5,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+
     [SerializeField] Text timeTxt;
     public Text endTxt;
     [HideInInspector] public Card firstCard;
@@ -73,9 +73,8 @@ public class GameManager : MonoBehaviour
 
             if (cardCount == 0)
             {
-                endTxt.gameObject.SetActive(true);
-                Time.timeScale = 0;
-                PlayerPrefs.SetInt("ClearLevel", (int)LevelManager.Instance.selectedLevel);
+
+                Invoke(nameof(ClearGame), 1f);
             }
             AudioManager.Instance.PlaySFX(SFX.Match);
         }
@@ -95,5 +94,12 @@ public class GameManager : MonoBehaviour
         endTxt.gameObject.SetActive(true);
         time = 0;
         Time.timeScale = 0;
+    }
+
+    void ClearGame()
+    {
+        endTxt.gameObject.SetActive(true);
+        Time.timeScale = 0;
+        PlayerPrefs.SetInt("ClearLevel", (int)LevelManager.Instance.selectedLevel);
     }
 }

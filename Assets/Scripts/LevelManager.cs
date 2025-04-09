@@ -15,8 +15,11 @@ public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance { get; private set; }
 
+    
     public List<UILevelSlot> levelUPSlots = new List<UILevelSlot>();
     public int[] cardCountArray = new int[3] { 3, 6, 9};
+
+    
     public Level selectedLevel = Level.MBTI;
 
 
