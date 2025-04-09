@@ -1,21 +1,26 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+
 public enum BGM
 {
     Main,       //StartScene BGM
-    InGame    //InGame BGM
+    InGame,    //InGame BGM
+    Hidden,     //Hidden BGM
+    Ending,     //Ending BGM
 }
 public enum SFX
 {
     Flip,       //카드 뒤집을때 Sound
     Match,   //카드 매치시 Sound
+    UnMatch, //카드 매치 불발시 Sound
 }
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
-
+    [Header("BGM")]
     [SerializeField] List<AudioClip> bgmClips;
+    [Header("효과음")]
     [SerializeField] List<AudioClip> sfxClips;
 
     [SerializeField] AudioSource bgmPlayer;

@@ -790,10 +790,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bgmClips:
-  - {fileID: 8300000, guid: 6294997415a1fce46840c877562168f2, type: 3}
+  - {fileID: 8300000, guid: fae519c14f835e046b13559996a3c325, type: 3}
+  - {fileID: 8300000, guid: 95cbad254104c7d49a42218efb4620a6, type: 3}
+  - {fileID: 8300000, guid: 5c9f1fb8cd67312469e28a5144f5eeeb, type: 3}
+  - {fileID: 8300000, guid: 1cac582fd06410344a2c14a26d9df272, type: 3}
   sfxClips:
   - {fileID: 8300000, guid: 761d5a37611c2c8449db9acdfb085567, type: 3}
   - {fileID: 8300000, guid: 3352ceb25a5608b44b4cc38dd61235c9, type: 3}
+  - {fileID: 8300000, guid: 95837b2f893f5384789a4a2f6b3ddb48, type: 3}
   bgmPlayer: {fileID: 1002514539}
   sfxPlayer: {fileID: 1002514537}
 --- !u!82 &1002514539
@@ -806,7 +810,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 6294997415a1fce46840c877562168f2, type: 3}
+  m_audioClip: {fileID: 8300000, guid: fae519c14f835e046b13559996a3c325, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
