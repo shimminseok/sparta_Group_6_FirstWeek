@@ -29,25 +29,24 @@ public class Board : MonoBehaviour
             float y = (i / level) * 2.8f;
             go.transform.localPosition = new Vector2(x, y);
             go.GetComponent<Card>().Setting(arr[i]);
-
-            //level에 따른 board의 position.x 변경
-            float boardPosX = 0;
-            if(level == 9)
-            {
-                boardPosX = -5.0f;
-            }
-            else if(level == 6)
-            {
-                boardPosX = -2.3f;
-            }
-            else if(level == 3)
-            {
-                boardPosX = 0.3f;
-            }
-
-            board.transform.localPosition = new Vector3(boardPosX, 0.6f, 0f);
-
         }
+
+        //level에 따른 board의 position.x 변경
+        float boardPosX = 0;
+        if (LevelManager.Instance.selectedLevel == Level.MBTI)
+        {
+            boardPosX = 0.3f;
+        }
+        else if (LevelManager.Instance.selectedLevel == Level.Reason)
+        {
+            boardPosX = -2.3f;
+        }
+        else if (LevelManager.Instance.selectedLevel == Level.Resolution)
+        {
+            boardPosX = -5f;
+        }
+        board.transform.localPosition = new Vector3(boardPosX, 0.6f, 0f);
+
         GameManager.Instance.cardCount = arr.Length;
     }
 
