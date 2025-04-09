@@ -38,7 +38,7 @@ public class LevelManager : MonoBehaviour
 
         //selectedLevel = (Level)PlayerPrefs.GetInt("ClearLevel",0);
 
-        for (int i = 0; i < (int)selectedLevel; i++)
+        for (int i = 0; i <= (int)selectedLevel; i++)
         {
             levelUPSlots[i]?.OpenCard();
         }
@@ -50,6 +50,7 @@ public class LevelManager : MonoBehaviour
     }
     public int GetCardCount()
     {
+        selectedLevel = (Level)((int)selectedLevel % CardCountArray.Length);
         return CardCountArray[(int)selectedLevel];
     }
 

@@ -1045,7 +1045,7 @@ MonoBehaviour:
   - {fileID: 1664340959}
   - {fileID: 1238271507}
   - {fileID: 1824868600}
-  selectedLevel: 3
+  selectedLevel: 0
 --- !u!1 &1238271502
 GameObject:
   m_ObjectHideFlags: 0
@@ -1181,7 +1181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 491c4cb670e2e1f4b87f550d77b6d2ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  level: 0
+  level: 1
   levelBtn: {fileID: 1238271506}
   lockObject: {fileID: 817420489}
   isOpenStage: 0
@@ -1202,7 +1202,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1341558937
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1950,7 +1950,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 491c4cb670e2e1f4b87f550d77b6d2ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  level: 0
+  level: 2
   levelBtn: {fileID: 1824868599}
   lockObject: {fileID: 1407386843}
   isOpenStage: 0

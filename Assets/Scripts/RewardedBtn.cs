@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Advertisements;
-using UnityEngine.UI;
-
 using UnityEngine.SceneManagement;
-using System.Linq;
+using UnityEngine.UI;
 
 public class RewardedBtn : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowListener
 {
@@ -25,7 +24,7 @@ public class RewardedBtn : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowLi
         _adUnitId = _androidAdUnitId;
 #endif
         // Disable the button until the ad is ready to show:
-        
+
     }
 
     // Call this public method when you want to get an ad ready to show.
@@ -64,7 +63,8 @@ public class RewardedBtn : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowLi
             Debug.Log("Unity Ads Rewarded Ad Completed");
             // Grant a reward.
             LoadAd();
-            LevelManager.Instance.LevelUp();
+            if (!GameManager.Instance.isGameOver)
+                LevelManager.Instance.LevelUp();
             SceneManager.LoadScene("SampleScene");
         }
     }
