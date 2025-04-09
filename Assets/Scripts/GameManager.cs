@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public Card secondCard;
 
     public int cardCount = 0;
-    public int hiddenConditionCnt = 1;
+    public int hiddenConditionCnt = 99;
     public int feiledMatchCnt = 0;
 
     float time = 0f;
@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     // 경고 애니메이션 트리거용 애니메이터
     [SerializeField] Animator timeAnimator;
     bool isFirstWaring;
-
+    bool isGameOver;
     private void Awake()
     {
         if (Instance == null)
@@ -30,7 +30,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Time.timeScale = 1;
-        switch(LevelManager.Instance.selectedLevel)
+        AudioManager.Instance.ChangeBGM(BGM.InGame);
+        switch (LevelManager.Instance.selectedLevel)
         {
             case Level.MBTI:
                 time = 30f;
@@ -59,8 +60,9 @@ public class GameManager : MonoBehaviour
             timeAnimator.gameObject.SetActive(true);
         }
 
-        if (time <= 0)
+        if (time <= 0 && !isGameOver)
         {
+            isGameOver = true;
             EndGame();
         }
         timeTxt.text = time.ToString("N2");
@@ -106,6 +108,7 @@ public class GameManager : MonoBehaviour
         endTxt.gameObject.SetActive(true);
         time = 0;
         Time.timeScale = 0;
+        AudioManager.Instance.ChangeBGM(BGM.Ending);
     }
 
     void ClearGame()
