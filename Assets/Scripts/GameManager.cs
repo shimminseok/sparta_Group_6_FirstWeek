@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     // 경고 애니메이션 트리거용 애니메이터
     [SerializeField] Animator timeAnimator;
     bool isFirstWaring;
+    bool isGameOver;
 
     private void Awake()
     {
@@ -59,7 +60,7 @@ public class GameManager : MonoBehaviour
             timeAnimator.gameObject.SetActive(true);
         }
 
-        if (time <= 0)
+        if (time <= 0 && !isGameOver)
         {
             EndGame();
         }
