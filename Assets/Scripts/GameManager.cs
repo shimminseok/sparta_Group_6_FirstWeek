@@ -43,24 +43,17 @@ public class GameManager : MonoBehaviour
         time += Time.deltaTime;
         timeTxt.text = time.ToString("N2");
 
-        //레벨에 따른 타임아웃 시간 변경
-        if(time < gameTimer)
+
+//        // 남은 시간이 10초 이하로 처음 진입할 때 경고 애니메이션 실행
+//        if (previousTime < gameTimer - 10f && time >= gameTimer - 10f)
+//        {
+//            timeAnimator.SetTrigger("Warning");
+//        }
+
+        if(time >= gameTimer)
         {
-            if (LevelManager.Instance.selectedLevel == Level.MBTI)
-            {
-                time = 30f;
-            }
-            else if (LevelManager.Instance.selectedLevel == Level.Resolution)
-            {
-                time = 35f;
-            }
-            else if (LevelManager.Instance.selectedLevel == Level.Resolution)
-            {
-                time = 40f;
-            }
-        }
-        else
             EndGame();
+        }
     }
 
     public void isMatched()
@@ -95,6 +88,7 @@ public class GameManager : MonoBehaviour
     {
         endTxt.text = "Game Over";
         endTxt.gameObject.SetActive(true);
+        time = gameTimer;
         Time.timeScale = 0;
     }
 }
