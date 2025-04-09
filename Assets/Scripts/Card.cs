@@ -80,7 +80,6 @@ public class Card : MonoBehaviour
     public void CloseCard()
     {
         Invoke("CloseCardInvoke", 1.0f);
-        
     }
     void CloseCardInvoke()
     {

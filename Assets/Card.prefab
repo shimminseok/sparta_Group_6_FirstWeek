@@ -424,7 +424,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  endTime: 0
+  endTime: 0.2
 --- !u!95 &4670091948347343745
 Animator:
   serializedVersion: 5
@@ -433,7 +433,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5839160585675979582}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 11a0c26e7b240654cafbf20a7bf8d066, type: 2}
   m_CullingMode: 0

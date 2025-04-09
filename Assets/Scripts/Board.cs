@@ -1,8 +1,10 @@
 using UnityEngine;
 using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEditor;
 using Unity.Burst.Intrinsics;
+using NUnit.Framework;
 public class Board : MonoBehaviour
 {
     public Transform cards;
@@ -10,6 +12,7 @@ public class Board : MonoBehaviour
 
     public GameObject board;
 
+    List<Card> cardList = new List<Card>(); 
     void Awake()
     {
         
@@ -43,7 +46,6 @@ public class Board : MonoBehaviour
         GameManager.Instance.cardCount = arr.Length;
     }
 
-
     int[] CreateCard(int _cnt)
     {
         int[] arr = new int[_cnt * 2];
@@ -56,6 +58,7 @@ public class Board : MonoBehaviour
         return arr;
     }
 
+    //카드를 뿌리는 코루틴 함수
     IEnumerator CoCardSpread(int[] _arr, int _level)
     {
         for (int i = 0; i < _arr.Length; i++)
@@ -64,10 +67,15 @@ public class Board : MonoBehaviour
 
             float x = (i % _level) * 1.8f;
             float y = (i / _level) * 2.8f;
-            go.GetComponent<Card>().Setting(i,Vector3.zero, new Vector2(x, y));
+            go.GetComponent<Card>().Setting(_arr[i], Vector3.zero, new Vector2(x, y));
 
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0f);
         }
-        
+
+        //모든 카드가 자기 자리에 위차할 경우, 애니메이션 실행
+        foreach(var card in cardList)
+        {
+            card.anim.enabled = true;
+        }
     }
 }
