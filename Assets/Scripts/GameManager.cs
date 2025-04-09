@@ -46,12 +46,6 @@ public class GameManager : MonoBehaviour
     { 
 
         time -= Time.deltaTime;
-        // 남은 시간이 10초 이하로 처음 진입할 때 경고 애니메이션 실행
-
-        //if (previousTime < gameTimer - 10f && time >= gameTimer - 10f)
-        //{
-        //    timeAnimator.SetTrigger("Warning");
-        //}
 
         if(time <= 10f && !isFirstWaring)
         {
