@@ -1,38 +1,95 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+
+    [Header("UI")]
     [SerializeField] Text timeTxt;
-    public Text endTxt;
+    [SerializeField] Text endTxt;
+    [SerializeField] AnimationCurve animationCurve;
+    [Header("Componenet")]
+    [SerializeField] Animator timeAnimator;
+    [SerializeField] StageChangeFadeUI fadeUI;
+    [SerializeField] Board_1 infoBoard;
     [HideInInspector] public Card firstCard;
     [HideInInspector] public Card secondCard;
-    public int cardCount = 0;
 
+    [Header("TimeSlider")]
+    [SerializeField] Slider timeSlider;
+    [SerializeField] Image sliderFill;
+    [SerializeField] Image pikachuIsCute;
+
+    [SerializeField] int hiddenConditionCnt;
+
+
+
+
+    bool isFirstWaring;
+    int feiledMatchCnt = 0;
     float time = 0f;
 
+
+
+    public int CardCount { get; private set; } = 0;
+    public bool IsGameOver { get; private set; }
+
+    bool isGameOver;
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
             Instance = this;
     }
     void Start()
     {
         Time.timeScale = 1;
-    }
+        AudioManager.Instance.ChangeBGM(LevelManager.Instance.SelectedLevel == Level.Hidden ? BGM.Hidden : BGM.InGame);
 
-    // Update is called once per frame
+        switch (LevelManager.Instance.SelectedLevel)
+        {
+            case Level.MBTI:
+                time = 30f;
+                break;
+            case Level.Resolution:
+            case Level.Hidden:
+                time = 40f;
+                break;
+        }
+
+
+        CardCount = LevelManager.Instance.GetCardCount() * 2;
+        EnterStage(LevelManager.Instance.SelectedLevel);
+        timeSlider.maxValue = time;
+
+    }
     void Update()
     {
-        time += Time.deltaTime;
-        timeTxt.text = time.ToString("N2");
-        if(time >= 30f)
+
+        time -= Time.deltaTime * (LevelManager.Instance.SelectedLevel == Level.Hidden ? 3 : 1);
+
+
+        if (time <= 10)
         {
-            time = 30f;
-            EndGame();
+            if (!isFirstWaring)
+            {
+                timeTxt.color = Color.red;
+                isFirstWaring = true;
+                timeAnimator.gameObject.SetActive(true);
+
+                sliderFill.color = new Color(225 / 255f, 0 / 255f, 0 / 255f, 1f);
+                pikachuIsCute.color = new Color(255 / 255f, 130 / 255f, 130 / 255f, 1f);
+
+            }
+            else if (time <= 0 && !IsGameOver)
+            {
+                IsGameOver = true;
+                EndGame();
+            }
         }
+        timeSlider.value = time;
+        timeTxt.text = time.ToString("N2");
     }
 
     public void isMatched()
@@ -43,20 +100,28 @@ public class GameManager : MonoBehaviour
             firstCard.DestroyCard();
             secondCard.DestroyCard();
 
-            cardCount -= 2;
+            CardCount -= 2;
 
-            if(cardCount == 0)
+            if (CardCount == 0)
             {
-                endTxt.gameObject.SetActive(true);
-                Time.timeScale = 0;
-                PlayerPrefs.SetInt("ClearLevel", (int)LevelManager.Instance.selectedLevel);
+                Invoke(nameof(ClearGame), 1.5f);
             }
             AudioManager.Instance.PlaySFX(SFX.Match);
+            feiledMatchCnt = 0;
         }
         else
         {
+            AudioManager.Instance.PlaySFX(SFX.UnMatch);
+            feiledMatchCnt++;
             firstCard.CloseCard();
             secondCard.CloseCard();
+            AudioManager.Instance.PlaySFX(SFX.UnMatch);
+            feiledMatchCnt++;
+            if (feiledMatchCnt == hiddenConditionCnt && LevelManager.Instance.SelectedLevel != Level.Hidden)
+            {
+                StartCoroutine(EnterStage(Level.Hidden));
+
+            }
         }
 
         firstCard = null;
@@ -65,12 +130,91 @@ public class GameManager : MonoBehaviour
 
     void EndGame()
     {
-        endTxt.text = "Game Over";
+        if (LevelManager.Instance.SelectedLevel != Level.Hidden)
+        {
+            endTxt.color = Color.black;
+            endTxt.text = "Game Over";
+            AdsInitializer.Instance.ShowAd();
+        }
+        else
+        {
+            LevelManager.Instance.ChangeLevel(Level.MBTI);
+            StartCoroutine(TextScaleTween(50, 300));
+            StartCoroutine(TextRotationTween());
+            endTxt.color = Color.yellow;
+            endTxt.text = "��������?!?!?!?\nŷ����?!?!?!";
+        }
         endTxt.gameObject.SetActive(true);
+        time = 0;
         Time.timeScale = 0;
     }
-
-    private void OnApplicationQuit()
+    void ClearGame()
     {
+        infoBoard.SettingPos();
+        LevelManager.Instance.LevelUp();
+        //AdsInitializer.Instance.ShowAd();
+        Time.timeScale = 0;
+        PlayerPrefs.SetInt("ClearLevel", (int)LevelManager.Instance.SelectedLevel);
+    }
+
+    public IEnumerator EnterStage(Level _level)
+    {
+        fadeUI.PlayFade();
+        yield return new WaitForSeconds(2f);
+        LevelManager.Instance.OnClickLevel((int)_level);
+    }
+
+    IEnumerator TextScaleTween(int _from, int _to)
+    {
+        endTxt.fontSize = _from;
+        while (true)
+        {
+            float timer = 0;
+            float lerpduration = 1f;
+            while (timer < lerpduration)
+            {
+                float percent = timer / lerpduration;
+                endTxt.fontSize = (int)Mathf.Lerp(_from, _to, animationCurve.Evaluate(percent));
+                timer += Time.unscaledDeltaTime;
+                yield return null;
+            }
+            timer = 0;
+            while (timer < lerpduration)
+            {
+                float percent = timer / lerpduration;
+                endTxt.fontSize = (int)Mathf.Lerp(_to, _from, percent);
+                timer += Time.unscaledDeltaTime;
+                yield return null;
+            }
+            yield return null;
+        }
+    }
+    IEnumerator TextRotationTween()
+    {
+
+        Quaternion startRot = endTxt.rectTransform.localRotation;
+        Quaternion endRot = startRot * Quaternion.Euler(0f, 90f, 0f);
+        while (true)
+        {
+            float timer = 0;
+            float lerpduration = 0.5f;
+            while (timer < lerpduration)
+            {
+                float percent = timer / lerpduration;
+                endTxt.rectTransform.rotation = Quaternion.Lerp(startRot, endRot, percent);
+                timer += Time.unscaledDeltaTime;
+                yield return null;
+            }
+            timer = 0;
+            while (timer < lerpduration)
+            {
+                float percent = timer / lerpduration;
+                endTxt.rectTransform.rotation = Quaternion.Lerp(endRot, startRot, percent);
+                timer += Time.unscaledDeltaTime;
+                yield return null;
+            }
+            yield return null;
+        }
+
     }
 }

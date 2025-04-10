@@ -1,54 +1,49 @@
-using UnityEngine;
-using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.Burst.Intrinsics;
 using UnityEditor;
+using UnityEngine;
 public class Board : MonoBehaviour
 {
     public Transform cards;
     public GameObject card;
 
-    public GameObject board;
-
-    void Awake()
-    {
-        
-    }
     void Start()
     {
         int level = LevelManager.Instance.GetCardCount();
 
-        int[] arr = CreateCard(LevelManager.Instance.GetCardCount());  // {0,0,1,1, ...,9,9};
+        int[] arr = CreateCard(level);  // {0,0,1,1, ...,9,9};
 
         arr = arr.OrderBy(x => Random.Range(0, arr.Last())).ToArray();
 
-        for (int i = 0; i < arr.Length; i++)
+
+        //levelï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ boardï¿½ï¿½ position.x ï¿½ï¿½ï¿½ï¿½
+        int x = level;
+        int y = level;
+        float boardPosX = 0;
+        float boardPosY = 0.6f;
+        if (LevelManager.Instance.SelectedLevel == Level.MBTI)
         {
-            GameObject go = Instantiate(card, cards);
-            
-            float x = (i % level) * 1.6f;
-            float y = (i / level) * 2.6f;
-            go.transform.localPosition = new Vector2(x, y);
-            go.GetComponent<Card>().Setting(arr[i]);
-
-            //level¿¡ µû¸¥ boardÀÇ position.x º¯°æ
-            float boardPosX = 0;
-            if(level == 9)
-            {
-                boardPosX = -4.3f;
-            }
-            else if(level == 6)
-            {
-                boardPosX = -1.9f;
-            }
-            else if(level == 3)
-            {
-                boardPosX = 0.5f;
-            }
-
-            board.transform.localPosition = new Vector3(boardPosX, 0.6f, 0f);
-
+            boardPosX = 0.3f;
         }
-        GameManager.Instance.cardCount = arr.Length;
+        else if (LevelManager.Instance.SelectedLevel == Level.Reason)
+        {
+            boardPosX = -2.3f;
+        }
+        else if (LevelManager.Instance.SelectedLevel == Level.Resolution)
+        {
+            boardPosX = -5f;
+        }
+        else
+        {
+            boardPosX = -4.3f;
+            boardPosY = -0.6f;
+            x = 8;
+            y = 8;
+        }
+        transform.localPosition = new Vector2(boardPosX, boardPosY);
+        StartCoroutine(Card(arr, x, y));
     }
 
 
@@ -62,5 +57,18 @@ public class Board : MonoBehaviour
         }
 
         return arr;
+    }
+
+    IEnumerator Card(int[] _arr, int _x, int _y)
+    {
+        for (int i = 0; i < _arr.Length; i++)
+        {
+            GameObject go = Instantiate(card, cards);
+            go.transform.localPosition = new Vector2(6.4f, 2.4f);
+            float x = (i % _x) * 1.8f;
+            float y = (i / _y) * 2.8f;
+            go.GetComponent<Card>().Setting(_arr[i], new Vector2(x, y));
+            yield return new WaitForSeconds(0.1f);
+        }
     }
 }

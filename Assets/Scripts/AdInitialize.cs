@@ -1,8 +1,11 @@
 using UnityEngine;
 using UnityEngine.Advertisements;
+using UnityEngine.SceneManagement;
 
-public class AdsInitializer : MonoBehaviour, IUnityAdsInitializationListener, IUnityAdsLoadListener
+public class AdsInitializer : MonoBehaviour, IUnityAdsInitializationListener, IUnityAdsLoadListener, IUnityAdsShowListener
 {
+    public static AdsInitializer Instance { get; private set; }
+
     [SerializeField] string _androidGameId;
     [SerializeField] string _iOSGameId;
     [SerializeField] bool _testMode = true;
@@ -14,6 +17,11 @@ public class AdsInitializer : MonoBehaviour, IUnityAdsInitializationListener, IU
 
     void Awake()
     {
+        if(Instance == null)
+        {
+            Instance = this;
+        }
+
         InitializeAds();
     }
 
@@ -53,12 +61,46 @@ public class AdsInitializer : MonoBehaviour, IUnityAdsInitializationListener, IU
         Debug.Log("Loading Ad: " + _adUnitId);
         Advertisement.Load(_adUnitId, this);
     }
+    public void ShowAd()
+    {
+        // Disable the button:
+        // Then show the ad:
 
+        Advertisement.Show(_adUnitId, this);
+    }
     public void OnUnityAdsAdLoaded(string placementId)
     {
     }
 
     public void OnUnityAdsFailedToLoad(string placementId, UnityAdsLoadError error, string message)
     {
+    }
+
+    public void OnUnityAdsShowFailure(string placementId, UnityAdsShowError error, string message)
+    {
+    }
+
+    public void OnUnityAdsShowStart(string placementId)
+    {
+    }
+
+    public void OnUnityAdsShowClick(string placementId)
+    {
+    }
+
+    /// <summary>
+    /// 광고를 다보면 실행되는 콜백 함수
+    /// </summary>
+    /// <param name="placementId"></param>
+    /// <param name="showCompletionState"></param>
+    public void OnUnityAdsShowComplete(string placementId, UnityAdsShowCompletionState showCompletionState)
+    {
+        if (placementId.Equals(_adUnitId) && showCompletionState.Equals(UnityAdsShowCompletionState.COMPLETED))
+        {
+            Debug.Log("Unity Ads Rewarded Ad Completed");
+            // Grant a reward.
+            LoadAd();
+            SceneManager.LoadScene("SampleScene");
+        }
     }
 }
