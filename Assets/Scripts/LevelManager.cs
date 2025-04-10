@@ -11,6 +11,7 @@ public enum Level
     Resolution,
     Hidden
 }
+
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance { get; private set; }
@@ -40,7 +41,8 @@ public class LevelManager : MonoBehaviour
     public void OnClickLevel(int _level)
     {
         ChangeLevel((Level)_level);
-        SceneManager.LoadScene("SampleScene");
+        LoadSceneManager.Instance.LoadScene(SceneType.InGameScene);
+
     }
     public int GetCardCount()
     {

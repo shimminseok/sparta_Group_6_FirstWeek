@@ -10,13 +10,15 @@ public class Board : MonoBehaviour
     public GameObject card;
 
 
-
+    //사전형 자료구조
+    //Key, Value값으로 쌍으로 저장되며 Ket는 중복될 수 없음, 장점 검색이 겁나빠름
+    //List는 100개중에서 50번째가져오고싶어요. 0~50번까지 가야되요.
     Dictionary<Level, Vector2> boardPositions = new Dictionary<Level, Vector2>
     {
         { Level.MBTI,      new Vector2( 0.3f,  0.6f) },
         { Level.Reason,    new Vector2(-2.3f, 0.6f) },
         { Level.Resolution,new Vector2(-5.0f, 0.6f) },
-        { Level.Hidden,   new Vector2(-4.3f,-0.6f) }
+        { Level.Hidden,   new Vector2(-4.3f,-0.6f) },
     };
     void Start()
     {

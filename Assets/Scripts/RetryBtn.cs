@@ -6,6 +6,7 @@ public class RetryBtn : MonoBehaviour
 
     public void OnClickRetryBtn()
     {
-        SceneManager.LoadScene("SampleScene");
+        LoadSceneManager.Instance.LoadScene(SceneType.InGameScene);
+
     }
 }

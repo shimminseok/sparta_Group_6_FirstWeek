@@ -6,10 +6,10 @@ using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class Board_1 : MonoBehaviour
+public class TeamMemberInfoBoard : MonoBehaviour
 {
     public List<Transform> infmRoot = new List<Transform>();
-    public List<Card_1> infms = new List<Card_1>();
+    public List<TeamMemberInfoCard> infms = new List<TeamMemberInfoCard>();
 
     [SerializeField] GameObject nextTextObj;
  
@@ -62,7 +62,7 @@ public class Board_1 : MonoBehaviour
         target.localPosition = to;
     }
 
-    private IEnumerator RotateLerp(Card_1 card)
+    private IEnumerator RotateLerp(TeamMemberInfoCard card)
     {
         float duration = 0.15f;
         int loopCount = 5 + (infms.IndexOf(card) * 2);  // 원래 로직 유지
@@ -76,7 +76,7 @@ public class Board_1 : MonoBehaviour
         }
     }
 
-    private IEnumerator RotateHalf(Card_1 card, float duration, bool forward)
+    private IEnumerator RotateHalf(TeamMemberInfoCard card, float duration, bool forward)
     {
         Quaternion start = card.transform.localRotation;
         Quaternion end = start * Quaternion.Euler(0f, forward ? 90f : -90f, 0f);
