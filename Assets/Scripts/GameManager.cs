@@ -13,9 +13,14 @@ public class GameManager : MonoBehaviour
     [Header("Componenet")]
     [SerializeField] Animator timeAnimator;
     [SerializeField] StageChangeFadeUI fadeUI;
+    [SerializeField] Board_1 infoBoard;
     [HideInInspector] public Card firstCard;
     [HideInInspector] public Card secondCard;
 
+    [Header("TimeSlider")]
+    [SerializeField] Slider timeSlider;
+    [SerializeField] Image sliderFill;
+    [SerializeField] Image pikachuIsCute;
 
     [SerializeField] int hiddenConditionCnt;
 
@@ -56,6 +61,8 @@ public class GameManager : MonoBehaviour
 
         CardCount = LevelManager.Instance.GetCardCount() * 2;
         EnterStage(LevelManager.Instance.SelectedLevel);
+        timeSlider.maxValue = time;
+
     }
     void Update()
     {
@@ -70,6 +77,10 @@ public class GameManager : MonoBehaviour
                 timeTxt.color = Color.red;
                 isFirstWaring = true;
                 timeAnimator.gameObject.SetActive(true);
+
+                sliderFill.color = new Color(225 / 255f, 0 / 255f, 0 / 255f, 1f);
+                pikachuIsCute.color = new Color(255 / 255f, 130 / 255f, 130 / 255f, 1f);
+
             }
             else if (time <= 0 && !IsGameOver)
             {
@@ -77,6 +88,7 @@ public class GameManager : MonoBehaviour
                 EndGame();
             }
         }
+        timeSlider.value = time;
         timeTxt.text = time.ToString("N2");
     }
 
@@ -107,7 +119,6 @@ public class GameManager : MonoBehaviour
             feiledMatchCnt++;
             if (feiledMatchCnt == hiddenConditionCnt && LevelManager.Instance.SelectedLevel != Level.Hidden)
             {
-                //���罺������ ����
                 StartCoroutine(EnterStage(Level.Hidden));
 
             }
@@ -139,8 +150,9 @@ public class GameManager : MonoBehaviour
     }
     void ClearGame()
     {
+        infoBoard.SettingPos();
         LevelManager.Instance.LevelUp();
-        AdsInitializer.Instance.ShowAd();
+        //AdsInitializer.Instance.ShowAd();
         Time.timeScale = 0;
         PlayerPrefs.SetInt("ClearLevel", (int)LevelManager.Instance.SelectedLevel);
     }
