@@ -64,17 +64,6 @@ public class Board : MonoBehaviour
         for (int i = 0; i < _arr.Length; i++)
         {
             GameObject go = Instantiate(card, cards);
-            float x = (i % _level) * 1.8f;
-            float y = (i / _level) * 2.8f;
-            go.GetComponent<Card>().Setting(_arr[i], new Vector2(x, y));
-
-            yield return new WaitForSeconds(0f);
-        }
-
-        //��� ī�尡 �ڱ� �ڸ��� ������ ���, �ִϸ��̼� ����
-        foreach(var card in cardList)
-        {
-            card.anim.enabled = true;
             go.transform.localPosition = new Vector2(6.4f, 2.4f);
             float x = (i % _x) * 1.8f;
             float y = (i / _y) * 2.8f;

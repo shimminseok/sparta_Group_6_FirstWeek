@@ -1,7 +1,7 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
@@ -10,12 +10,18 @@ public class GameManager : MonoBehaviour
     [SerializeField] Text timeTxt;
     [SerializeField] Text endTxt;
     [SerializeField] AnimationCurve animationCurve;
-
     [Header("Componenet")]
     [SerializeField] Animator timeAnimator;
     [SerializeField] StageChangeFadeUI fadeUI;
+    [SerializeField] Board_1 infoBoard;
     [HideInInspector] public Card firstCard;
     [HideInInspector] public Card secondCard;
+
+    [Header("TimeSlider")]
+    [SerializeField] Slider timeSlider;
+    [SerializeField] Image sliderFill;
+    [SerializeField] Image pikachuIsCute;
+
     [SerializeField] int hiddenConditionCnt;
 
 
@@ -30,8 +36,6 @@ public class GameManager : MonoBehaviour
     public int CardCount { get; private set; } = 0;
     public bool IsGameOver { get; private set; }
 
-    [SerializeField] Animator timeAnimator;
-    bool isFirstWaring;
     bool isGameOver;
     private void Awake()
     {
@@ -42,14 +46,11 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1;
         AudioManager.Instance.ChangeBGM(LevelManager.Instance.SelectedLevel == Level.Hidden ? BGM.Hidden : BGM.InGame);
-        switch (LevelManager.Instance.SelectedLevel)
 
+        switch (LevelManager.Instance.SelectedLevel)
         {
             case Level.MBTI:
                 time = 30f;
-                break;
-            case Level.Reason:
-                time = 35;
                 break;
             case Level.Resolution:
             case Level.Hidden:
@@ -60,11 +61,15 @@ public class GameManager : MonoBehaviour
 
         CardCount = LevelManager.Instance.GetCardCount() * 2;
         EnterStage(LevelManager.Instance.SelectedLevel);
+        timeSlider.maxValue = time;
 
     }
     void Update()
-    { 
+    {
+
         time -= Time.deltaTime * (LevelManager.Instance.SelectedLevel == Level.Hidden ? 3 : 1);
+
+
         if (time <= 10)
         {
             if (!isFirstWaring)
@@ -72,6 +77,10 @@ public class GameManager : MonoBehaviour
                 timeTxt.color = Color.red;
                 isFirstWaring = true;
                 timeAnimator.gameObject.SetActive(true);
+
+                sliderFill.color = new Color(225 / 255f, 0 / 255f, 0 / 255f, 1f);
+                pikachuIsCute.color = new Color(255 / 255f, 130 / 255f, 130 / 255f, 1f);
+
             }
             else if (time <= 0 && !IsGameOver)
             {
@@ -79,6 +88,7 @@ public class GameManager : MonoBehaviour
                 EndGame();
             }
         }
+        timeSlider.value = time;
         timeTxt.text = time.ToString("N2");
     }
 
@@ -94,9 +104,6 @@ public class GameManager : MonoBehaviour
 
             if (CardCount == 0)
             {
-                endTxt.gameObject.SetActive(true);
-                Time.timeScale = 0;
-                PlayerPrefs.SetInt("ClearLevel", (int)LevelManager.Instance.SelectedLevel);
                 Invoke(nameof(ClearGame), 1.5f);
             }
             AudioManager.Instance.PlaySFX(SFX.Match);
@@ -104,6 +111,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            AudioManager.Instance.PlaySFX(SFX.UnMatch);
+            feiledMatchCnt++;
             firstCard.CloseCard();
             secondCard.CloseCard();
             AudioManager.Instance.PlaySFX(SFX.UnMatch);
@@ -135,18 +144,15 @@ public class GameManager : MonoBehaviour
             endTxt.color = Color.yellow;
             endTxt.text = "��������?!?!?!?\nŷ����?!?!?!";
         }
-
         endTxt.gameObject.SetActive(true);
         time = 0;
         Time.timeScale = 0;
-        AudioManager.Instance.ChangeBGM(BGM.Ending);
     }
-
     void ClearGame()
     {
+        infoBoard.SettingPos();
         LevelManager.Instance.LevelUp();
-        AdsInitializer.Instance.ShowAd();
-
+        //AdsInitializer.Instance.ShowAd();
         Time.timeScale = 0;
         PlayerPrefs.SetInt("ClearLevel", (int)LevelManager.Instance.SelectedLevel);
     }
@@ -155,6 +161,7 @@ public class GameManager : MonoBehaviour
     {
         fadeUI.PlayFade();
         yield return new WaitForSeconds(2f);
+        LevelManager.Instance.OnClickLevel((int)_level);
     }
 
     IEnumerator TextScaleTween(int _from, int _to)

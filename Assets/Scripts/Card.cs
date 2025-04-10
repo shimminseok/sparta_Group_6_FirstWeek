@@ -26,7 +26,6 @@ public class Card : MonoBehaviour
     public void OpenCard()
     {
         AudioManager.Instance.PlaySFX(SFX.Flip);
-        anim.SetBool("isOpen", true);
         StartCoroutine(CardOpenEffect());
         if (GameManager.Instance.firstCard == null)
         {
@@ -59,7 +58,6 @@ public class Card : MonoBehaviour
     IEnumerator CloseCard(float _time)
     {
         yield return new WaitForSecondsRealtime(_time);
-        anim.SetBool("isOpen", false);
         front.SetActive(false);
         back.SetActive(true);
     }

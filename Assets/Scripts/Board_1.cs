@@ -10,11 +10,7 @@ public class Board_1 : MonoBehaviour
     public List<Transform> cardRoot = new List<Transform>();
     public List<Card_1> cards = new List<Card_1>();
 
-    bool isAllFlip;
-    private void Start()
-    {
-        SettingPos();
-    }
+
     public void SettingPos()
     {
         for (int i = 0; i < cards.Count; i++)
