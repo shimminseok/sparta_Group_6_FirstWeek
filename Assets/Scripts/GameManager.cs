@@ -1,5 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -9,7 +12,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] Text timeTxt;
     [SerializeField] Text endTxt;
     [SerializeField] AnimationCurve animationCurve;
-
 
     [Header("Componenet")]
     [SerializeField] Animator timeAnimator;
@@ -29,8 +31,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] Image sliderFill;
     [SerializeField] Image pikachuIsCute;
 
-
-    // 경고 애니메이션 트리거용 애니메이터
 
     private void Awake()
     {
@@ -56,9 +56,8 @@ public class GameManager : MonoBehaviour
 
         EnterStage(LevelManager.Instance.SelectedLevel);
         timeSlider.maxValue = time;
-    }
 
-    // Update is called once per frame
+    }
     void Update()
     {
 
@@ -66,23 +65,19 @@ public class GameManager : MonoBehaviour
 
         if (time <= 10f && !isFirstWaring)
         {
-            timeTxt.color = Color.red;
-            isFirstWaring = true;
-
-            sliderFill.color = new Color(225/255f, 0/255f, 0/255f, 1f);
-            pikachuIsCute.color = new Color(255 / 255f, 130 / 255f, 130 / 255f, 1f);
-
-            //timeAnimator.SetTrigger("Warning");
-        }
-
-        if (time <= 0)
-        {
-            EndGame();
+            if (!isFirstWaring)
+            {
+                timeTxt.color = Color.red;
+                isFirstWaring = true;
+                timeAnimator.gameObject.SetActive(true);
+            }
+            else if (time <= 0 && !IsGameOver)
+            {
+                IsGameOver = true;
+                EndGame();
+            }
         }
         timeTxt.text = time.ToString("N2");
-
-        
-        timeSlider.value = time;
     }
 
     public void isMatched()
@@ -93,20 +88,30 @@ public class GameManager : MonoBehaviour
             firstCard.DestroyCard();
             secondCard.DestroyCard();
 
-            cardCount -= 2;
+            CardCount -= 2;
 
-            if (cardCount == 0)
+            if (CardCount == 0)
             {
                 endTxt.gameObject.SetActive(true);
                 Time.timeScale = 0;
                 PlayerPrefs.SetInt("ClearLevel", (int)LevelManager.Instance.SelectedLevel);
+                Invoke(nameof(ClearGame), 1.5f);
             }
             AudioManager.Instance.PlaySFX(SFX.Match);
+            feiledMatchCnt = 0;
         }
         else
         {
             firstCard.CloseCard();
             secondCard.CloseCard();
+            AudioManager.Instance.PlaySFX(SFX.UnMatch);
+            feiledMatchCnt++;
+            if (feiledMatchCnt == hiddenConditionCnt && LevelManager.Instance.SelectedLevel != Level.Hidden)
+            {
+                //히든스테이지 입장
+                StartCoroutine(EnterStage(Level.Hidden));
+
+            }
         }
 
         firstCard = null;
@@ -115,11 +120,89 @@ public class GameManager : MonoBehaviour
 
     void EndGame()
     {
-        endTxt.text = "Game Over";
+        if (LevelManager.Instance.SelectedLevel != Level.Hidden)
+        {
+            endTxt.color = Color.black;
+            endTxt.text = "Game Over";
+            AdsInitializer.Instance.ShowAd();
+        }
+        else
+        {
+            LevelManager.Instance.ChangeLevel(Level.MBTI);
+            StartCoroutine(TextScaleTween(50, 300));
+            StartCoroutine(TextRotationTween());
+            endTxt.color = Color.yellow;
+            endTxt.text = "못깨겠조?!?!?!?\n킹받조?!?!?!";
+        }
         endTxt.gameObject.SetActive(true);
         time = 0;
         Time.timeScale = 0;
     }
+    void ClearGame()
+    {
+        LevelManager.Instance.LevelUp();
+        AdsInitializer.Instance.ShowAd();
+        Time.timeScale = 0;
+        PlayerPrefs.SetInt("ClearLevel", (int)LevelManager.Instance.SelectedLevel);
+    }
 
+    public IEnumerator EnterStage(Level _level)
+    {
+        fadeUI.PlayFade();
+        yield return new WaitForSeconds(2f);
+    }
 
+    IEnumerator TextScaleTween(int _from, int _to)
+    {
+        endTxt.fontSize = _from;
+        while (true)
+        {
+            float timer = 0;
+            float lerpduration = 1f;
+            while (timer < lerpduration)
+            {
+                float percent = timer / lerpduration;
+                endTxt.fontSize = (int)Mathf.Lerp(_from, _to, animationCurve.Evaluate(percent));
+                timer += Time.unscaledDeltaTime;
+                yield return null;
+            }
+            timer = 0;
+            while (timer < lerpduration)
+            {
+                float percent = timer / lerpduration;
+                endTxt.fontSize = (int)Mathf.Lerp(_to, _from, percent);
+                timer += Time.unscaledDeltaTime;
+                yield return null;
+            }
+            yield return null;
+        }
+    }
+    IEnumerator TextRotationTween()
+    {
+
+        Quaternion startRot = endTxt.rectTransform.localRotation;
+        Quaternion endRot = startRot * Quaternion.Euler(0f, 90f, 0f);
+        while (true)
+        {
+            float timer = 0;
+            float lerpduration = 0.5f;
+            while (timer < lerpduration)
+            {
+                float percent = timer / lerpduration;
+                endTxt.rectTransform.rotation = Quaternion.Lerp(startRot, endRot, percent);
+                timer += Time.unscaledDeltaTime;
+                yield return null;
+            }
+            timer = 0;
+            while (timer < lerpduration)
+            {
+                float percent = timer / lerpduration;
+                endTxt.rectTransform.rotation = Quaternion.Lerp(endRot, startRot, percent);
+                timer += Time.unscaledDeltaTime;
+                yield return null;
+            }
+            yield return null;
+        }
+
+    }
 }

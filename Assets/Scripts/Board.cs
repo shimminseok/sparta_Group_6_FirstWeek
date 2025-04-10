@@ -1,32 +1,29 @@
-using UnityEngine;
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
+using System.Linq;
 using Unity.Burst.Intrinsics;
-using NUnit.Framework;
+using UnityEditor;
+using UnityEngine;
 public class Board : MonoBehaviour
 {
     public Transform cards;
     public GameObject card;
 
-    public GameObject board;
 
     List<Card> cardList = new List<Card>(); 
-    void Awake()
-    {
-        
-    }
     void Start()
     {
         int level = LevelManager.Instance.GetCardCount();
 
-        int[] arr = CreateCard(LevelManager.Instance.GetCardCount());  // {0,0,1,1, ...,9,9};
+        int[] arr = CreateCard(level);  // {0,0,1,1, ...,9,9};
 
         arr = arr.OrderBy(x => Random.Range(0, arr.Last())).ToArray();
 
-        //level에 따른 board의 position.x 변경
+
+        int x = level;
+        int y = level;
         float boardPosX = 0;
+        float boardPosY = 0.6f;
         if (LevelManager.Instance.SelectedLevel == Level.MBTI)
         {
             boardPosX = 0.3f;
@@ -39,10 +36,17 @@ public class Board : MonoBehaviour
         {
             boardPosX = -5f;
         }
-        board.transform.localPosition = new Vector3(boardPosX, 0.6f, 0f);
-
+        else
+        {
+            boardPosX = -4.3f;
+            boardPosY = -0.6f;
+            x = 8;
+            y = 8;
+        }
         StartCoroutine(CoCardSpread(arr, level));
+        transform.localPosition = new Vector2(boardPosX, boardPosY);
     }
+
 
     int[] CreateCard(int _cnt)
     {
@@ -55,8 +59,6 @@ public class Board : MonoBehaviour
 
         return arr;
     }
-
-    //카드를 뿌리는 코루틴 함수
     IEnumerator CoCardSpread(int[] _arr, int _level)
     {
         for (int i = 0; i < _arr.Length; i++)
@@ -65,13 +67,15 @@ public class Board : MonoBehaviour
 
             float x = (i % _level) * 1.8f;
             float y = (i / _level) * 2.8f;
-            go.GetComponent<Card>().Setting(_arr[i], new Vector2(x, y));
+
+            Card cardScript = go.GetComponent<Card>();
+            cardScript.Setting(_arr[i], new Vector2(x,y));
+            cardList.Add(cardScript);
 
             yield return new WaitForSeconds(0f);
         }
 
-        //모든 카드가 자기 자리에 위차할 경우, 애니메이션 실행
-        foreach(var card in cardList)
+        foreach (var card in cardList)
         {
             card.anim.enabled = true;
         }
