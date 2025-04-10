@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour
             timeTxt.color = Color.red;
             isFirstWaring = true;
             timeAnimator.gameObject.SetActive(true);
+            AudioManager.Instance.ChangeBGM(BGM.Warning);
         }
 
         if (time <= 0 && !isGameOver)
@@ -90,6 +91,7 @@ public class GameManager : MonoBehaviour
         {
             firstCard.CloseCard();
             secondCard.CloseCard();
+            AudioManager.Instance.PlaySFX(SFX.UnMatch);
             feiledMatchCnt++;
             if (feiledMatchCnt == hiddenConditionCnt && LevelManager.Instance.selectedLevel != Level.Hidden)
             {
