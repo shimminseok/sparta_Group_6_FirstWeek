@@ -11,10 +11,10 @@ public class StageChangeFadeUI : MonoBehaviour
 
 
 
-    public void PlayFade()
+    public void PlayFadeInOut(float _time = 0)
     {
         fadeImg.enabled = true;
-        StartCoroutine(FadeAndLoadScene());
+        StartCoroutine(FadeAndLoadScene(_time));
     }
     public void PlayFadeIn(float _time = 0)
     {
@@ -23,15 +23,14 @@ public class StageChangeFadeUI : MonoBehaviour
     }
     public void PlayerFadeOut(float _time = 0)
     {
-        Debug.Log("Fade Out");
         fadeImg.enabled = true;
         StartCoroutine(FadeOut(_time));
     }
-    IEnumerator FadeAndLoadScene()
+    IEnumerator FadeAndLoadScene(float _time)
     {
-        yield return StartCoroutine(Fade(0f,1f));
+        yield return StartCoroutine(FadeIn(_time));
         yield return null;
-        yield return StartCoroutine(Fade(1f,0f));
+        yield return StartCoroutine(FadeOut(_time));
         fadeImg.enabled = false;
     }
     IEnumerator FadeIn(float _delayTime = 0)

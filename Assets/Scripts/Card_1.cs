@@ -7,7 +7,6 @@ public class Card_1 : MonoBehaviour
     public List<Sprite> infmSprites;
 
     Sprite originSprite;
-    // Start is called before the first frame update
     void Start()
     {
         originSprite = currentSprite.sprite;
@@ -15,7 +14,6 @@ public class Card_1 : MonoBehaviour
 
     public void ChangeInfmSprite()
     {
-        Debug.Log(LevelManager.Instance.SelectedLevel);
         currentSprite.sprite = infmSprites[(int)LevelManager.Instance.SelectedLevel];
     }
     public void ChangeOriginSprite()
