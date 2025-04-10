@@ -76,8 +76,6 @@ public class GameManager : MonoBehaviour
         //timeSlider 조금 늦게 실행시키고 싶어.
         HandleTimer();
 
-        time += Time.deltaTime;
-
         timeSlider.value = time;
         timeTxt.text = time.ToString("N2");
 
