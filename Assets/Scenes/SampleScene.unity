@@ -154,14 +154,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeTxt: {fileID: 2012168232}
   endTxt: {fileID: 1109915814}
+  animationCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  timeAnimator: {fileID: 0}
+  fadeUI: {fileID: 0}
+  hiddenConditionCnt: 0
   firstCard: {fileID: 0}
   secondCard: {fileID: 0}
-  cardCount: 0
   timeSlider: {fileID: 555825464}
   sliderFill: {fileID: 1973298635}
   pikachuIsCute: {fileID: 486455651}
-  timeAnimator: {fileID: 0}
---- !u!4 &212220230
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1078,9 +1084,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7724891dbd8831448b3e2cd2dbb48630, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _androidAdUnitId: Rewarded_Android
-  _iOSAdUnitId: Rewarded_iOS
---- !u!1 &1115334078
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1511,8 +1514,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  cardCountArray: 030000000600000009000000
-  selectedLevel: 0
 --- !u!4 &2069120953
 Transform:
   m_ObjectHideFlags: 0
