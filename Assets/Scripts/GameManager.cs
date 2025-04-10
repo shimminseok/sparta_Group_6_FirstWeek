@@ -146,7 +146,6 @@ public class GameManager : MonoBehaviour
         if (LevelManager.Instance.SelectedLevel != Level.Hidden)
         {
             endTxt.color = Color.black;
-            StartCoroutine(EnterStage(LevelManager.Instance.SelectedLevel));
         }
         else
         {
