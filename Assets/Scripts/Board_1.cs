@@ -62,7 +62,7 @@ public class Board_1 : MonoBehaviour
 
     private IEnumerator RotateLerp(Card_1 card)
     {
-        float duration = 0.2f;
+        float duration = 0.15f;
         int loopCount = 5 + (infms.IndexOf(card) * 2);  // 원래 로직 유지
 
         for (int i = 0; i < loopCount; i++)
