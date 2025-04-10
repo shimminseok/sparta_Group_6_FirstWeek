@@ -1,22 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Card_1 : MonoBehaviour
 {
     public SpriteRenderer currentSprite;
-    public List<Sprite> cardSprites;
+    public List<Sprite> infmSprites;
 
     Sprite originSprite;
+    // Start is called before the first frame update
     void Start()
     {
         originSprite = currentSprite.sprite;
-    }
+    } 
 
-    public void ChangeCardSprite()
+    public void ChangeInfmSprite()
     {
-        currentSprite.sprite = cardSprites[(int)LevelManager.Instance.SelectedLevel];
+        currentSprite.sprite = infmSprites[(int)LevelManager.Instance.selectedLevel];
     }
     public void ChangeOriginSprite()
     {
@@ -27,4 +27,5 @@ public class Card_1 : MonoBehaviour
     {
         transform.localPosition = Vector3.zero;
     }
+
 }
