@@ -139,14 +139,13 @@ public class GameManager : MonoBehaviour
 
     void EndGame()
     {
+        AudioManager.Instance.ChangeBGM(BGM.Ending);
         Time.timeScale = 0;
         endTxt.gameObject.SetActive(true);
         time = 0;
         if (LevelManager.Instance.SelectedLevel != Level.Hidden)
         {
             endTxt.color = Color.black;
-            endTxt.text = "Game Over";
-
             StartCoroutine(EnterStage(LevelManager.Instance.SelectedLevel));
         }
         else
