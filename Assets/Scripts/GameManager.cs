@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public Card firstCard;
     [HideInInspector] public Card secondCard;
     public int cardCount = 0;
+    [Header("TimeSlider")]
     [SerializeField] Slider timeSlider;
     [SerializeField] Image sliderFill;
     [SerializeField] Image pikachuIsCute;
