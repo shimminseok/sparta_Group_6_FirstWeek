@@ -189,9 +189,12 @@ MonoBehaviour:
     m_RotationOrder: 4
   timeAnimator: {fileID: 454021916}
   fadeUI: {fileID: 1528804473}
+  hiddenConditionCnt: 5
   firstCard: {fileID: 0}
   secondCard: {fileID: 0}
-  hiddenConditionCnt: 5
+  timeSlider: {fileID: 0}
+  sliderFill: {fileID: 0}
+  pikachuIsCute: {fileID: 0}
 --- !u!4 &212220230
 Transform:
   m_ObjectHideFlags: 0
