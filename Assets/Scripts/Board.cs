@@ -67,7 +67,7 @@ public class Board : MonoBehaviour
 
             float x = (i % _level) * 1.8f;
             float y = (i / _level) * 2.8f;
-            go.GetComponent<Card>().Setting(_arr[i], Vector3.zero, new Vector2(x, y));
+            go.GetComponent<Card>().Setting(_arr[i], Vector2.zero, new Vector2(x, y));
 
             yield return new WaitForSeconds(0f);
         }

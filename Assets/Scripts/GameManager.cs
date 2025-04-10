@@ -11,8 +11,12 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public Card firstCard;
     [HideInInspector] public Card secondCard;
     public int cardCount = 0;
+    [SerializeField] Slider timeSlider;
+    [SerializeField] Image sliderFill;
+    [SerializeField] Image pikachuIsCute;
 
     float time = 0f;
+    float maxValue = 0f;
 
     // 경고 애니메이션 트리거용 애니메이터
     [SerializeField] Animator timeAnimator;
@@ -38,7 +42,7 @@ public class GameManager : MonoBehaviour
                 time = 40f;
                 break;
         }
-
+        timeSlider.maxValue = time;
     }
 
     // Update is called once per frame
@@ -51,6 +55,10 @@ public class GameManager : MonoBehaviour
         {
             timeTxt.color = Color.red;
             isFirstWaring = true;
+
+            sliderFill.color = new Color(225/255f, 0/255f, 0/255f, 1f);
+            pikachuIsCute.color = new Color(255 / 255f, 130 / 255f, 130 / 255f, 1f);
+
             //timeAnimator.SetTrigger("Warning");
         }
 
@@ -59,6 +67,9 @@ public class GameManager : MonoBehaviour
             EndGame();
         }
         timeTxt.text = time.ToString("N2");
+
+        
+        timeSlider.value = time;
     }
 
     public void isMatched()
