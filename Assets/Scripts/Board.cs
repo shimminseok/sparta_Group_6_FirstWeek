@@ -27,15 +27,15 @@ public class Board : MonoBehaviour
 
         //level에 따른 board의 position.x 변경
         float boardPosX = 0;
-        if (LevelManager.Instance.selectedLevel == Level.MBTI)
+        if (LevelManager.Instance.SelectedLevel == Level.MBTI)
         {
             boardPosX = 0.3f;
         }
-        else if (LevelManager.Instance.selectedLevel == Level.Reason)
+        else if (LevelManager.Instance.SelectedLevel == Level.Reason)
         {
             boardPosX = -2.3f;
         }
-        else if (LevelManager.Instance.selectedLevel == Level.Resolution)
+        else if (LevelManager.Instance.SelectedLevel == Level.Resolution)
         {
             boardPosX = -5f;
         }
@@ -67,7 +67,7 @@ public class Board : MonoBehaviour
 
             float x = (i % _level) * 1.8f;
             float y = (i / _level) * 2.8f;
-            go.GetComponent<Card>().Setting(_arr[i], Vector2.zero, new Vector2(x, y));
+            go.GetComponent<Card>().Setting(_arr[i], new Vector2(x, y));
 
             yield return new WaitForSeconds(0f);
         }

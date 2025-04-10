@@ -1,6 +1,4 @@
-using System.Threading;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -31,7 +29,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Time.timeScale = 1;
-        switch(LevelManager.Instance.selectedLevel)
+        switch(LevelManager.Instance.SelectedLevel)
         {
             case Level.MBTI:
                 time = 30f;
@@ -87,7 +85,7 @@ public class GameManager : MonoBehaviour
             {
                 endTxt.gameObject.SetActive(true);
                 Time.timeScale = 0;
-                PlayerPrefs.SetInt("ClearLevel", (int)LevelManager.Instance.selectedLevel);
+                PlayerPrefs.SetInt("ClearLevel", (int)LevelManager.Instance.SelectedLevel);
             }
             AudioManager.Instance.PlaySFX(SFX.Match);
         }
