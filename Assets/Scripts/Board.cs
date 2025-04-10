@@ -9,45 +9,34 @@ public class Board : MonoBehaviour
     public Transform cards;
     public GameObject card;
 
+
+
+    Dictionary<Level, Vector2> boardPositions = new Dictionary<Level, Vector2>
+    {
+        { Level.MBTI,      new Vector2( 0.3f,  0.6f) },
+        { Level.Reason,    new Vector2(-2.3f, 0.6f) },
+        { Level.Resolution,new Vector2(-5.0f, 0.6f) },
+        { Level.Hidden,   new Vector2(-4.3f,-0.6f) }
+    };
     void Start()
     {
-        int level = LevelManager.Instance.GetCardCount();
+        int cardCount = LevelManager.Instance.GetCardCount();
+        int[] arr = Shuffle(cardCount);  // {0,0,1,1, ...,9,9};
 
-        int[] arr = CreateCard(level);  // {0,0,1,1, ...,9,9};
+        int gridX = cardCount;
+        int gridY = cardCount;
+        if (LevelManager.Instance.SelectedLevel == Level.Hidden)
+        {
+            gridX = 8;
+            gridY = 8;
+        }
 
-        arr = arr.OrderBy(x => Random.Range(0, arr.Last())).ToArray();
-
-
-        //level�� ���� board�� position.x ����
-        int x = level;
-        int y = level;
-        float boardPosX = 0;
-        float boardPosY = 0.6f;
-        if (LevelManager.Instance.SelectedLevel == Level.MBTI)
-        {
-            boardPosX = 0.3f;
-        }
-        else if (LevelManager.Instance.SelectedLevel == Level.Reason)
-        {
-            boardPosX = -2.3f;
-        }
-        else if (LevelManager.Instance.SelectedLevel == Level.Resolution)
-        {
-            boardPosX = -5f;
-        }
-        else
-        {
-            boardPosX = -4.3f;
-            boardPosY = -0.6f;
-            x = 8;
-            y = 8;
-        }
-        transform.localPosition = new Vector2(boardPosX, boardPosY);
-        StartCoroutine(Card(arr, x, y));
+        transform.localPosition = GetBoardPosition(LevelManager.Instance.SelectedLevel);
+        StartCoroutine(SpawnCards(arr, gridX, gridY));
     }
 
 
-    int[] CreateCard(int _cnt)
+    int[] Shuffle(int _cnt)
     {
         int[] arr = new int[_cnt * 2];
         for (int i = 0; i < _cnt; i++)
@@ -55,11 +44,14 @@ public class Board : MonoBehaviour
             arr[i * 2] = i;
             arr[i * 2 + 1] = i;
         }
-
+        arr = arr.OrderBy(x => Random.Range(0,arr.Last())).ToArray();
         return arr;
     }
-
-    IEnumerator Card(int[] _arr, int _x, int _y)
+    Vector2 GetBoardPosition(Level _level)
+    {
+        return boardPositions.TryGetValue(_level, out Vector2 pos) ? pos : boardPositions[Level.Hidden];
+    }
+    IEnumerator SpawnCards(int[] _arr, int _x, int _y)
     {
         for (int i = 0; i < _arr.Length; i++)
         {
@@ -70,5 +62,6 @@ public class Board : MonoBehaviour
             go.GetComponent<Card>().Setting(_arr[i], new Vector2(x, y));
             yield return new WaitForSeconds(0.1f);
         }
+
     }
 }

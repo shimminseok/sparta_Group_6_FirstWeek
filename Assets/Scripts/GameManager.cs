@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
 
 
 
-    bool isFirstWaring;
+    bool isFirstWarning;
     int feiledMatchCnt = 0;
     float time = 0f;
 
@@ -44,43 +44,48 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        Time.timeScale = 1;
+        fadeUI.PlayerFadeOut(0.5f);
         AudioManager.Instance.ChangeBGM(LevelManager.Instance.SelectedLevel == Level.Hidden ? BGM.Hidden : BGM.InGame);
+        SetInitialTime(LevelManager.Instance.SelectedLevel);
 
-        switch (LevelManager.Instance.SelectedLevel)
+        CardCount = LevelManager.Instance.GetCardCount() * 2;
+        timeSlider.maxValue = time;
+        Time.timeScale = 1;
+
+    }
+    void SetInitialTime(Level _level)
+    {
+        switch (_level)
         {
             case Level.MBTI:
                 time = 30f;
+                break;
+            case Level.Reason:
+                time = 35f;
                 break;
             case Level.Resolution:
             case Level.Hidden:
                 time = 40f;
                 break;
         }
-
-
-        CardCount = LevelManager.Instance.GetCardCount() * 2;
-        EnterStage(LevelManager.Instance.SelectedLevel);
-        timeSlider.maxValue = time;
-
     }
     void Update()
     {
 
-        time -= Time.deltaTime * (LevelManager.Instance.SelectedLevel == Level.Hidden ? 3 : 1);
+        HandleTimer();
+        timeSlider.value = time;
+        timeTxt.text = time.ToString("N2");
+    }
+    void HandleTimer()
+    {
+        float multiplier = LevelManager.Instance.SelectedLevel == Level.Hidden ? 3 : 1;
+        time -= Time.deltaTime * multiplier;
 
-
-        if (time <= 10)
+        if (time <= 10f)
         {
-            if (!isFirstWaring)
+            if (!isFirstWarning)
             {
-                timeTxt.color = Color.red;
-                isFirstWaring = true;
-                timeAnimator.gameObject.SetActive(true);
-
-                sliderFill.color = new Color(225 / 255f, 0 / 255f, 0 / 255f, 1f);
-                pikachuIsCute.color = new Color(255 / 255f, 130 / 255f, 130 / 255f, 1f);
-
+                TriggerLowTimeWarning();
             }
             else if (time <= 0 && !IsGameOver)
             {
@@ -88,10 +93,16 @@ public class GameManager : MonoBehaviour
                 EndGame();
             }
         }
-        timeSlider.value = time;
-        timeTxt.text = time.ToString("N2");
     }
+    void TriggerLowTimeWarning()
+    {
+        isFirstWarning = true;
+        timeTxt.color = Color.red;
+        timeAnimator.gameObject.SetActive(true);
 
+        sliderFill.color = new Color(225 / 255f, 0, 0, 1f);
+        pikachuIsCute.color = new Color(1f, 130 / 255f, 130 / 255f, 1f);
+    }
     public void isMatched()
     {
 
@@ -112,15 +123,12 @@ public class GameManager : MonoBehaviour
         else
         {
             AudioManager.Instance.PlaySFX(SFX.UnMatch);
-            feiledMatchCnt++;
             firstCard.CloseCard();
             secondCard.CloseCard();
-            AudioManager.Instance.PlaySFX(SFX.UnMatch);
             feiledMatchCnt++;
             if (feiledMatchCnt == hiddenConditionCnt && LevelManager.Instance.SelectedLevel != Level.Hidden)
             {
                 StartCoroutine(EnterStage(Level.Hidden));
-
             }
         }
 
@@ -130,91 +138,87 @@ public class GameManager : MonoBehaviour
 
     void EndGame()
     {
+        Time.timeScale = 0;
+        endTxt.gameObject.SetActive(true);
+        time = 0;
         if (LevelManager.Instance.SelectedLevel != Level.Hidden)
         {
             endTxt.color = Color.black;
             endTxt.text = "Game Over";
-            AdsInitializer.Instance.ShowAd();
+
+            StartCoroutine(EnterStage(LevelManager.Instance.SelectedLevel));
         }
         else
         {
             LevelManager.Instance.ChangeLevel(Level.MBTI);
+            endTxt.color = Color.yellow;
             StartCoroutine(TextScaleTween(50, 300));
             StartCoroutine(TextRotationTween());
-            endTxt.color = Color.yellow;
-            endTxt.text = "��������?!?!?!?\nŷ����?!?!?!";
+            endTxt.text = "못깨겠조?!?!?\n킹받조?!?!?!";
         }
-        endTxt.gameObject.SetActive(true);
-        time = 0;
-        Time.timeScale = 0;
     }
     void ClearGame()
     {
         infoBoard.SettingPos();
-        LevelManager.Instance.LevelUp();
-        //AdsInitializer.Instance.ShowAd();
         Time.timeScale = 0;
-        PlayerPrefs.SetInt("ClearLevel", (int)LevelManager.Instance.SelectedLevel);
     }
 
     public IEnumerator EnterStage(Level _level)
     {
-        fadeUI.PlayFade();
+        fadeUI.PlayFadeIn();
         yield return new WaitForSeconds(2f);
-        LevelManager.Instance.OnClickLevel((int)_level);
+        LevelManager.Instance.ChangeLevel(_level);
+        if (_level != Level.Hidden)
+        {
+            AdsInitializer.Instance.ShowAd();
+        }
+        else
+        {
+            LevelManager.Instance.OnClickLevel((int)_level);
+        }
     }
-
     IEnumerator TextScaleTween(int _from, int _to)
     {
-        endTxt.fontSize = _from;
+        float duration = 1f;
         while (true)
         {
-            float timer = 0;
-            float lerpduration = 1f;
-            while (timer < lerpduration)
-            {
-                float percent = timer / lerpduration;
-                endTxt.fontSize = (int)Mathf.Lerp(_from, _to, animationCurve.Evaluate(percent));
-                timer += Time.unscaledDeltaTime;
-                yield return null;
-            }
-            timer = 0;
-            while (timer < lerpduration)
-            {
-                float percent = timer / lerpduration;
-                endTxt.fontSize = (int)Mathf.Lerp(_to, _from, percent);
-                timer += Time.unscaledDeltaTime;
-                yield return null;
-            }
+            yield return TweenFontSize(_from, _to, duration);
+            yield return TweenFontSize(_to, _from, duration);
+        }
+    }
+    IEnumerator TweenFontSize(int _from, int _to, float _duration)
+    {
+        float timer = 0f;
+        while (timer < _duration)
+        {
+            float percent = timer / _duration;
+            endTxt.fontSize = (int)Mathf.Lerp(_from, _to, animationCurve.Evaluate(percent));
+            timer += Time.unscaledDeltaTime;
             yield return null;
         }
     }
     IEnumerator TextRotationTween()
     {
-
         Quaternion startRot = endTxt.rectTransform.localRotation;
         Quaternion endRot = startRot * Quaternion.Euler(0f, 90f, 0f);
+
+        float duration = 0.5f;
+
         while (true)
         {
-            float timer = 0;
-            float lerpduration = 0.5f;
-            while (timer < lerpduration)
-            {
-                float percent = timer / lerpduration;
-                endTxt.rectTransform.rotation = Quaternion.Lerp(startRot, endRot, percent);
-                timer += Time.unscaledDeltaTime;
-                yield return null;
-            }
-            timer = 0;
-            while (timer < lerpduration)
-            {
-                float percent = timer / lerpduration;
-                endTxt.rectTransform.rotation = Quaternion.Lerp(endRot, startRot, percent);
-                timer += Time.unscaledDeltaTime;
-                yield return null;
-            }
+            yield return RotateTween(startRot, endRot, duration);
+            yield return RotateTween(endRot, startRot, duration);
+        }
+    }
+    IEnumerator RotateTween(Quaternion _from, Quaternion _to, float _duration)
+    {
+        float timer = 0f;
+        while (timer < _duration)
+        {
+            float percent = timer / _duration;
+            endTxt.rectTransform.rotation = Quaternion.Lerp(_from, _to, percent);
+            timer += Time.unscaledDeltaTime;
             yield return null;
         }
-
     }
 }
