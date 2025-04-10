@@ -18,7 +18,8 @@ public class LevelManager : MonoBehaviour
     [SerializeField] List<UILevelSlot> levelUPSlots = new List<UILevelSlot>();
 
     public Level SelectedLevel { get; private set; } = Level.MBTI;
-    int[] CardCountArray = new int[4] { 3, 6, 9, 12};
+
+    int[] CardCountArray = new int[4] { 3, 6, 9, 12 };
     void Awake()
     {
         if (Instance == null)

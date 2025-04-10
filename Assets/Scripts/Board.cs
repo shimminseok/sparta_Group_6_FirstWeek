@@ -42,8 +42,6 @@ public class Board : MonoBehaviour
         board.transform.localPosition = new Vector3(boardPosX, 0.6f, 0f);
 
         StartCoroutine(CoCardSpread(arr, level));
-
-        GameManager.Instance.cardCount = arr.Length;
     }
 
     int[] CreateCard(int _cnt)

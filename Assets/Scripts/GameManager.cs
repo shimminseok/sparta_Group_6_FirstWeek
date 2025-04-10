@@ -4,22 +4,33 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+
+    [Header("UI")]
     [SerializeField] Text timeTxt;
-    public Text endTxt;
+    [SerializeField] Text endTxt;
+    [SerializeField] AnimationCurve animationCurve;
+
+
+    [Header("Componenet")]
+    [SerializeField] Animator timeAnimator;
+    [SerializeField] StageChangeFadeUI fadeUI;
+    [SerializeField] int hiddenConditionCnt;
     [HideInInspector] public Card firstCard;
     [HideInInspector] public Card secondCard;
-    public int cardCount = 0;
+
+    bool isFirstWaring;
+    int feiledMatchCnt = 0;
+    float time = 0f;
+    public int CardCount { get; private set; } = 0;
+    public bool IsGameOver { get; private set; }
+
     [Header("TimeSlider")]
     [SerializeField] Slider timeSlider;
     [SerializeField] Image sliderFill;
     [SerializeField] Image pikachuIsCute;
 
-    float time = 0f;
-    float maxValue = 0f;
 
     // 경고 애니메이션 트리거용 애니메이터
-    [SerializeField] Animator timeAnimator;
-    bool isFirstWaring;
 
     private void Awake()
     {
@@ -29,28 +40,31 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Time.timeScale = 1;
-        switch(LevelManager.Instance.SelectedLevel)
+        AudioManager.Instance.ChangeBGM(LevelManager.Instance.SelectedLevel == Level.Hidden ? BGM.Hidden : BGM.InGame);
+
+        switch (LevelManager.Instance.SelectedLevel)
         {
             case Level.MBTI:
                 time = 30f;
                 break;
-            case Level.Reason:
-                time = 35;
-                break;
             case Level.Resolution:
+            case Level.Hidden:
                 time = 40f;
                 break;
         }
+        CardCount = LevelManager.Instance.GetCardCount() * 2;
+
+        EnterStage(LevelManager.Instance.SelectedLevel);
         timeSlider.maxValue = time;
     }
 
     // Update is called once per frame
     void Update()
-    { 
+    {
 
-        time -= Time.deltaTime;
+        time -= Time.deltaTime * (LevelManager.Instance.SelectedLevel == Level.Hidden ? 3 : 1);
 
-        if(time <= 10f && !isFirstWaring)
+        if (time <= 10f && !isFirstWaring)
         {
             timeTxt.color = Color.red;
             isFirstWaring = true;
@@ -106,4 +120,6 @@ public class GameManager : MonoBehaviour
         time = 0;
         Time.timeScale = 0;
     }
+
+
 }
