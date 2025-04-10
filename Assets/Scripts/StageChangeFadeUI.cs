@@ -23,7 +23,6 @@ public class StageChangeFadeUI : MonoBehaviour
     }
     public void PlayerFadeOut(float _time = 0)
     {
-        Debug.Log("Fade Out");
         fadeImg.enabled = true;
         StartCoroutine(FadeOut(_time));
     }
