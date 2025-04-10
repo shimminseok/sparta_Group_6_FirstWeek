@@ -643,10 +643,11 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 95cbad254104c7d49a42218efb4620a6, type: 3}
   - {fileID: 8300000, guid: 5c9f1fb8cd67312469e28a5144f5eeeb, type: 3}
   - {fileID: 8300000, guid: 1cac582fd06410344a2c14a26d9df272, type: 3}
+  - {fileID: 8300000, guid: 08238055c0af2254a93ef3ba76ef9348, type: 3}
   sfxClips:
   - {fileID: 8300000, guid: 761d5a37611c2c8449db9acdfb085567, type: 3}
   - {fileID: 8300000, guid: 3352ceb25a5608b44b4cc38dd61235c9, type: 3}
-  - {fileID: 8300000, guid: 95837b2f893f5384789a4a2f6b3ddb48, type: 3}
+  - {fileID: 8300000, guid: 13fffb1eda1315b4a890ab3c59e2ea01, type: 3}
   bgmPlayer: {fileID: 1002514539}
   sfxPlayer: {fileID: 1002514537}
 --- !u!82 &1002514539
@@ -661,7 +662,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: fae519c14f835e046b13559996a3c325, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.2
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1045,7 +1046,7 @@ MonoBehaviour:
   - {fileID: 1664340959}
   - {fileID: 1238271507}
   - {fileID: 1824868600}
-  selectedLevel: 0
+  selectedLevel: 3
 --- !u!1 &1238271502
 GameObject:
   m_ObjectHideFlags: 0
@@ -1202,7 +1203,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1341558937
 RectTransform:
   m_ObjectHideFlags: 0

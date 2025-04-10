@@ -1,52 +1,51 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.VisualScripting;
-using UnityEditor.Playables;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class Board_1 : MonoBehaviour
 {
-    public List<Transform> cardRoot = new List<Transform>();
-    public List<Card_1> cards = new List<Card_1>();
+    public List<Transform> infmRoot = new List<Transform>();
+    public List<Card_1> infms = new List<Card_1>();
 
-
+    [SerializeField] GameObject nextTextObj;
+ 
     public void SettingPos()
     {
-        for (int i = 0; i < cards.Count; i++)
+        for (int i = 0; i < infms.Count; i++)
         {
-            cards[i].gameObject.SetActive(true);
-            Vector2 targetPos = (i == 0) ? cardRoot[1].localPosition : (i == 3) ? cardRoot[2].localPosition : cardRoot[i].localPosition;
+            infms[i].gameObject.SetActive(true);
 
-            StartCoroutine(MoveCardRoutine(i, cards[i].transform.localPosition, targetPos));
+            Vector2 targetPos = (i == 0) ? infmRoot[1].localPosition
+                              : (i == 3) ? infmRoot[2].localPosition
+                              : infmRoot[i].localPosition;
+
+            StartCoroutine(MoveInfmRoutine(i, infms[i].transform.localPosition, targetPos));
         }
-
     }
 
-    private IEnumerator MoveCardRoutine(int _index, Vector2 _from, Vector2 _to)
+    private IEnumerator MoveInfmRoutine(int index, Vector2 from, Vector2 to)
     {
-        yield return StartCoroutine(MoveLerp(cards[_index].transform, _from, _to));
+        yield return MoveLerp(infms[index].transform, from, to);
 
-
-        if (_index == 0 || _index == 3)
+        if (index == 0 || index == 3)
         {
             yield return new WaitForSecondsRealtime(0.5f);
 
-            int midIndex = (_index == 0) ? 1 : 2;
-            yield return StartCoroutine(MoveLerp(cards[_index].transform,
-                                                 cardRoot[midIndex].localPosition,
-                                                 cardRoot[_index].localPosition));
-
+            int midIndex = (index == 0) ? 1 : 2;
+            yield return MoveLerp(infms[index].transform, infmRoot[midIndex].localPosition, infmRoot[index].localPosition);
 
             yield return new WaitForSecondsRealtime(0.5f);
-            for (int i = 0; i < cards.Count; i++)
-            {
-                StartCoroutine(RotateLerp(i));
-            }
+
+            foreach (var card in infms)
+                StartCoroutine(RotateLerp(card));
         }
     }
 
-    private IEnumerator MoveLerp(Transform _target, Vector2 _from, Vector2 _to)
+    private IEnumerator MoveLerp(Transform target, Vector2 from, Vector2 to)
     {
         float duration = 0.5f;
         float timer = 0f;
@@ -54,44 +53,40 @@ public class Board_1 : MonoBehaviour
         while (timer < duration)
         {
             timer += Time.unscaledDeltaTime;
-            _target.localPosition = Vector2.Lerp(_from, _to, timer / duration);
+            target.localPosition = Vector2.Lerp(from, to, timer / duration);
             yield return null;
         }
 
-        _target.localPosition = _to; // 최종 보정
+        target.localPosition = to;
     }
 
-    IEnumerator RotateLerp(int _index)
+    private IEnumerator RotateLerp(Card_1 card)
     {
-        float duration = 0.15f;
+        float duration = 0.2f;
+        int loopCount = 5 + (infms.IndexOf(card) * 2);  // 원래 로직 유지
 
-        for (int i = 0; i < 3 + (_index * 2); i++)
+        for (int i = 0; i < loopCount; i++)
         {
-            Quaternion from = cards[_index].transform.localRotation;
-            Quaternion toHalf = from * Quaternion.Euler(0, 90f, 0);
-
-            float timer = 0;
-            while (timer < duration)
-            {
-                timer += Time.unscaledDeltaTime;
-                cards[_index].transform.localRotation = Quaternion.Slerp(from, toHalf, timer / duration);
-                yield return null;
-            }
-
-            if (i % 2 == 0)
-                cards[_index].ChangeCardSprite();
-            else
-                cards[_index].ChangeOriginSprite();
-
-            Quaternion toFull = toHalf * Quaternion.Euler(0, 90f, 0);
-            Quaternion fromHalf = cards[_index].transform.localRotation;
-            timer = 0;
-            while(timer < duration)
-            {
-                timer += Time.unscaledDeltaTime;
-                cards[_index].transform.localRotation = Quaternion.Slerp(fromHalf, toFull, timer / duration);
-                yield return null;
-            }
+            yield return RotateHalf(card, duration, true);
+            if (i % 2 == 0) card.ChangeInfmSprite();
+            else card.ChangeOriginSprite();
+            yield return RotateHalf(card, duration, false);
         }
     }
+
+    private IEnumerator RotateHalf(Card_1 card, float duration, bool forward)
+    {
+        Quaternion start = card.transform.localRotation;
+        Quaternion end = start * Quaternion.Euler(0f, forward ? 90f : -90f, 0f);
+
+        float timer = 0;
+        while (timer < duration)
+        {
+            timer += Time.unscaledDeltaTime;
+            card.transform.localRotation = Quaternion.Slerp(start, end, timer / duration);
+            yield return null;
+        }
+        nextTextObj.SetActive(true);
+    }
 }
+

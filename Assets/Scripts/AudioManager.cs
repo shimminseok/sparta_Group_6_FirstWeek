@@ -8,6 +8,7 @@ public enum BGM
     InGame,    //InGame BGM
     Hidden,     //Hidden BGM
     Ending,     //Ending BGM
+    Warning,      //Warning BGM
 }
 public enum SFX
 {
