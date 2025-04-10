@@ -9,12 +9,14 @@ public enum BGM
     Hidden,     //Hidden BGM
     Ending,     //Ending BGM
     Warning,      //Warning BGM
+    Info,           //카드 정보가 나올때
 }
 public enum SFX
 {
     Flip,       //카드 뒤집을때 Sound
     Match,   //카드 매치시 Sound
     UnMatch, //카드 매치 불발시 Sound
+    Info_CardFlip //팀원 정보카드가 뿌려질떄
 }
 public class AudioManager : MonoBehaviour
 {

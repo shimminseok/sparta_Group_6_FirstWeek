@@ -644,10 +644,12 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 5c9f1fb8cd67312469e28a5144f5eeeb, type: 3}
   - {fileID: 8300000, guid: 1cac582fd06410344a2c14a26d9df272, type: 3}
   - {fileID: 8300000, guid: 08238055c0af2254a93ef3ba76ef9348, type: 3}
+  - {fileID: 8300000, guid: b5c948f7085f43e479f89733d32ad02b, type: 3}
   sfxClips:
   - {fileID: 8300000, guid: 761d5a37611c2c8449db9acdfb085567, type: 3}
   - {fileID: 8300000, guid: 3352ceb25a5608b44b4cc38dd61235c9, type: 3}
   - {fileID: 8300000, guid: 13fffb1eda1315b4a890ab3c59e2ea01, type: 3}
+  - {fileID: 8300000, guid: c7b3655d1ca7eb843ac2d4129c3e2314, type: 3}
   bgmPlayer: {fileID: 1002514539}
   sfxPlayer: {fileID: 1002514537}
 --- !u!82 &1002514539
