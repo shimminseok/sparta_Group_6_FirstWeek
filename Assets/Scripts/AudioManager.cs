@@ -39,7 +39,7 @@ public class AudioManager : MonoBehaviour
     }
     public void ChangeBGM(BGM _index)
     {
-        StartCoroutine(FadeChangBGM((int)_index));
+        StartCoroutine(FadeChangeBGM((int)_index));
     }
 
     public void PlaySFX(SFX _index)
@@ -53,7 +53,7 @@ public class AudioManager : MonoBehaviour
     }
 
 
-    IEnumerator FadeChangBGM(int _index)
+    IEnumerator FadeChangeBGM(int _index)
     {
         float timer = 0f;
         float startVolume = bgmPlayer.volume;
