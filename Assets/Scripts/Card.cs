@@ -44,33 +44,27 @@ public class Card : MonoBehaviour
     {
         anim.SetTrigger("isTrigger");
         StartCoroutine(DestoryCard(destroyTime));
-        //Invoke("DestoryCardInvoke", 1.0f);
-    }
-
-    void DestoryCardInvoke()
-    {
-        Destroy(gameObject);
-        //ÄÚ·çÆ¾
-
     }
     IEnumerator DestoryCard(float _time)
     {
-        yield return new WaitForSeconds(_time);
-
-        DestoryCardInvoke();
+        yield return new WaitForSecondsRealtime(_time);
+        Destroy(gameObject);
     }
 
     public void CloseCard()
     {
-        Invoke("CloseCardInvoke", 1.0f);
+        StartCoroutine(CloseCard(1f));
         
     }
-    void CloseCardInvoke()
+    IEnumerator CloseCard(float _time)
     {
+        yield return new WaitForSecondsRealtime(_time);
         anim.SetBool("isOpen", false);
         front.SetActive(false);
         back.SetActive(true);
     }
+
+
     IEnumerator CardOpenEffect()
     {
         Vector2 start = transform.localPosition;
@@ -82,7 +76,6 @@ public class Card : MonoBehaviour
 
         yield return MoveCard(endPos, start);
     }
-
     IEnumerator MoveCard(Vector2 _from, Vector2 _to)
     {
         float time = 0f;

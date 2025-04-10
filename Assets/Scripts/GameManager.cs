@@ -8,24 +8,31 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    [Header("UI")]
     [SerializeField] Text timeTxt;
-    [SerializeField] StageChangeFadeUI fadeUI;
+    [SerializeField] Text endTxt;
     [SerializeField] AnimationCurve animationCurve;
-    public Text endTxt;
 
+    [Header("Componenet")]
+    [SerializeField] Animator timeAnimator;
+    [SerializeField] StageChangeFadeUI fadeUI;
     [HideInInspector] public Card firstCard;
     [HideInInspector] public Card secondCard;
 
-    public int cardCount = 0;
-    public int hiddenConditionCnt = 1;
-    public int feiledMatchCnt = 0;
 
+    [SerializeField] int hiddenConditionCnt;
+
+
+
+
+    bool isFirstWaring;
+    int feiledMatchCnt = 0;
     float time = 0f;
 
-    // 경고 애니메이션 트리거용 애니메이터
-    [SerializeField] Animator timeAnimator;
-    bool isFirstWaring;
-    public bool isGameOver;
+
+
+    public int CardCount { get; private set; } = 0;
+    public bool IsGameOver { get; private set; }
 
     private void Awake()
     {
@@ -35,7 +42,9 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Time.timeScale = 1;
-        switch (LevelManager.Instance.selectedLevel)
+        AudioManager.Instance.ChangeBGM(LevelManager.Instance.SelectedLevel == Level.Hidden ? BGM.Hidden : BGM.InGame);
+
+        switch (LevelManager.Instance.SelectedLevel)
         {
             case Level.MBTI:
                 time = 30f;
@@ -45,29 +54,34 @@ public class GameManager : MonoBehaviour
                 break;
             case Level.Resolution:
             case Level.Hidden:
-                time = 20f;
+                time = 40f;
                 break;
         }
 
-    }
 
-    // Update is called once per frame
+        CardCount = LevelManager.Instance.GetCardCount() * 2;
+        EnterStage(LevelManager.Instance.SelectedLevel);
+
+    }
     void Update()
     {
 
-        time -= Time.deltaTime * (LevelManager.Instance.selectedLevel == Level.Hidden ? 3 : 1);
+        time -= Time.deltaTime * (LevelManager.Instance.SelectedLevel == Level.Hidden ? 3 : 1);
 
-        if (time <= 10f && !isFirstWaring)
-        {
-            timeTxt.color = Color.red;
-            isFirstWaring = true;
-            timeAnimator.gameObject.SetActive(true);
-        }
 
-        if (time <= 0 && !isGameOver)
+        if (time <= 10)
         {
-            isGameOver = true;
-            EndGame();
+            if (!isFirstWaring)
+            {
+                timeTxt.color = Color.red;
+                isFirstWaring = true;
+                timeAnimator.gameObject.SetActive(true);
+            }
+            else if (time <= 0 && !IsGameOver)
+            {
+                IsGameOver = true;
+                EndGame();
+            }
         }
         timeTxt.text = time.ToString("N2");
     }
@@ -80,9 +94,9 @@ public class GameManager : MonoBehaviour
             firstCard.DestroyCard();
             secondCard.DestroyCard();
 
-            cardCount -= 2;
+            CardCount -= 2;
 
-            if (cardCount == 0)
+            if (CardCount == 0)
             {
                 Invoke(nameof(ClearGame), 1.5f);
             }
@@ -93,11 +107,13 @@ public class GameManager : MonoBehaviour
         {
             firstCard.CloseCard();
             secondCard.CloseCard();
+            AudioManager.Instance.PlaySFX(SFX.UnMatch);
             feiledMatchCnt++;
-            if (feiledMatchCnt == hiddenConditionCnt && LevelManager.Instance.selectedLevel != Level.Hidden)
+            if (feiledMatchCnt == hiddenConditionCnt && LevelManager.Instance.SelectedLevel != Level.Hidden)
             {
                 //히든스테이지 입장
-                StartCoroutine(EnterHiddenStage());
+                StartCoroutine(EnterStage(Level.Hidden));
+
             }
         }
 
@@ -107,14 +123,15 @@ public class GameManager : MonoBehaviour
 
     void EndGame()
     {
-        if (LevelManager.Instance.selectedLevel != Level.Hidden)
+        if (LevelManager.Instance.SelectedLevel != Level.Hidden)
         {
             endTxt.color = Color.black;
             endTxt.text = "Game Over";
+            AdsInitializer.Instance.ShowAd();
         }
         else
         {
-            LevelManager.Instance.selectedLevel = Level.MBTI;
+            LevelManager.Instance.ChangeLevel(Level.MBTI);
             StartCoroutine(TextScaleTween(50, 300));
             StartCoroutine(TextRotationTween());
             endTxt.color = Color.yellow;
@@ -127,18 +144,16 @@ public class GameManager : MonoBehaviour
 
     void ClearGame()
     {
-        endTxt.gameObject.SetActive(true);
-        endTxt.fontSize = 100;
-        endTxt.text = "Next Level";
+        LevelManager.Instance.LevelUp();
+        AdsInitializer.Instance.ShowAd();
         Time.timeScale = 0;
-        PlayerPrefs.SetInt("ClearLevel", (int)LevelManager.Instance.selectedLevel);
+        PlayerPrefs.SetInt("ClearLevel", (int)LevelManager.Instance.SelectedLevel);
     }
 
-    IEnumerator EnterHiddenStage()
+    public IEnumerator EnterStage(Level _level)
     {
         fadeUI.PlayFade();
         yield return new WaitForSeconds(2f);
-        LevelManager.Instance.OnClickLevel((int)Level.Hidden);
     }
 
     IEnumerator TextScaleTween(int _from, int _to)
@@ -156,7 +171,6 @@ public class GameManager : MonoBehaviour
                 yield return null;
             }
             timer = 0;
-            lerpduration = 1f;
             while (timer < lerpduration)
             {
                 float percent = timer / lerpduration;
@@ -167,7 +181,6 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
     }
-
     IEnumerator TextRotationTween()
     {
 
@@ -185,7 +198,6 @@ public class GameManager : MonoBehaviour
                 yield return null;
             }
             timer = 0;
-            lerpduration = 0.5f;
             while (timer < lerpduration)
             {
                 float percent = timer / lerpduration;
@@ -193,8 +205,6 @@ public class GameManager : MonoBehaviour
                 timer += Time.unscaledDeltaTime;
                 yield return null;
             }
-
-
             yield return null;
         }
 

@@ -18,8 +18,6 @@ public class StageChangeFadeUI : MonoBehaviour
     }
     IEnumerator FadeAndLoadScene()
     {
-
-
         yield return StartCoroutine(Fade(0f,1f));
         yield return null;
         yield return StartCoroutine(Fade(1f,0f));

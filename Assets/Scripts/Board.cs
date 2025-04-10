@@ -9,12 +9,6 @@ public class Board : MonoBehaviour
     public Transform cards;
     public GameObject card;
 
-    public GameObject board;
-
-    void Awake()
-    {
-
-    }
     void Start()
     {
         int level = LevelManager.Instance.GetCardCount();
@@ -29,15 +23,15 @@ public class Board : MonoBehaviour
         int y = level;
         float boardPosX = 0;
         float boardPosY = 0.6f;
-        if (LevelManager.Instance.selectedLevel == Level.MBTI)
+        if (LevelManager.Instance.SelectedLevel == Level.MBTI)
         {
             boardPosX = 0.3f;
         }
-        else if (LevelManager.Instance.selectedLevel == Level.Reason)
+        else if (LevelManager.Instance.SelectedLevel == Level.Reason)
         {
             boardPosX = -2.3f;
         }
-        else if (LevelManager.Instance.selectedLevel == Level.Resolution)
+        else if (LevelManager.Instance.SelectedLevel == Level.Resolution)
         {
             boardPosX = -5f;
         }
@@ -48,11 +42,8 @@ public class Board : MonoBehaviour
             x = 8;
             y = 8;
         }
-        board.transform.localPosition = new Vector2(boardPosX, boardPosY);
+        transform.localPosition = new Vector2(boardPosX, boardPosY);
         StartCoroutine(Card(arr, x, y));
-
-
-        GameManager.Instance.cardCount = arr.Length;
     }
 
 
