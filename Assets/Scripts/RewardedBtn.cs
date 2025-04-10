@@ -8,5 +8,8 @@ using UnityEngine.UI;
 
 public class RewardedBtn : MonoBehaviour
 {
-    
+    public void OnClickRewardBtn()
+    {
+        AdsInitializer.Instance.ShowAd();
+    }
 }

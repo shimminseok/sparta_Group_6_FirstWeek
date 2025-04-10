@@ -1412,7 +1412,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1109915817}
         m_TargetAssemblyTypeName: RewardedBtn, Assembly-CSharp
-        m_MethodName: ShowAd
+        m_MethodName: OnClickRewardBtn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2443,7 +2443,7 @@ GameObject:
   - component: {fileID: 9039074124013994880}
   - component: {fileID: 76399835987337669}
   m_Layer: 5
-  m_Name: TimeTxxt
+  m_Name: TimeTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
