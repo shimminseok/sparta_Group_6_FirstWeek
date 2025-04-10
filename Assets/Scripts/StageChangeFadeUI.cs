@@ -9,8 +9,6 @@ public class StageChangeFadeUI : MonoBehaviour
     [SerializeField] Image fadeImg;
     [SerializeField] float fadeTime;
 
-
-
     public void PlayFadeInOut(float _time = 0)
     {
         fadeImg.enabled = true;

@@ -101,7 +101,7 @@ public class AdsInitializer : MonoBehaviour, IUnityAdsInitializationListener, IU
             if (!GameManager.Instance.IsGameOver)
                 LevelManager.Instance.LevelUp();
 
-            SceneManager.LoadScene("StartScene");
+            LoadSceneManager.Instance.LoadScene(SceneType.StartScene);
         }
     }
 }
