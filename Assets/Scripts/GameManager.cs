@@ -31,8 +31,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] Image pikachuIsCute;
 
 
-    // °æ°í ¾Ö´Ï¸ÞÀÌ¼Ç Æ®¸®°Å¿ë ¾Ö´Ï¸ÞÀÌÅÍ
+    // ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ Æ®ï¿½ï¿½ï¿½Å¿ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½ï¿½ï¿½ï¿½
 
+    bool isGameOver;
     private void Awake()
     {
         if (Instance == null)
