@@ -1,32 +1,28 @@
-using UnityEngine;
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
+using System.Linq;
 using Unity.Burst.Intrinsics;
-using NUnit.Framework;
+using UnityEditor;
+using UnityEngine;
 public class Board : MonoBehaviour
 {
     public Transform cards;
     public GameObject card;
 
-    public GameObject board;
-
-    List<Card> cardList = new List<Card>(); 
-    void Awake()
-    {
-        
-    }
     void Start()
     {
         int level = LevelManager.Instance.GetCardCount();
 
-        int[] arr = CreateCard(LevelManager.Instance.GetCardCount());  // {0,0,1,1, ...,9,9};
+        int[] arr = CreateCard(level);  // {0,0,1,1, ...,9,9};
 
         arr = arr.OrderBy(x => Random.Range(0, arr.Last())).ToArray();
 
-        //level¿¡ µû¸¥ boardÀÇ position.x º¯°æ
+
+        //levelï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ boardï¿½ï¿½ position.x ï¿½ï¿½ï¿½ï¿½
+        int x = level;
+        int y = level;
         float boardPosX = 0;
+        float boardPosY = 0.6f;
         if (LevelManager.Instance.SelectedLevel == Level.MBTI)
         {
             boardPosX = 0.3f;
@@ -39,10 +35,17 @@ public class Board : MonoBehaviour
         {
             boardPosX = -5f;
         }
-        board.transform.localPosition = new Vector3(boardPosX, 0.6f, 0f);
-
-        StartCoroutine(CoCardSpread(arr, level));
+        else
+        {
+            boardPosX = -4.3f;
+            boardPosY = -0.6f;
+            x = 8;
+            y = 8;
+        }
+        transform.localPosition = new Vector2(boardPosX, boardPosY);
+        StartCoroutine(Card(arr, x, y));
     }
+
 
     int[] CreateCard(int _cnt)
     {
@@ -56,24 +59,16 @@ public class Board : MonoBehaviour
         return arr;
     }
 
-    //Ä«µå¸¦ »Ñ¸®´Â ÄÚ·çÆ¾ ÇÔ¼ö
-    IEnumerator CoCardSpread(int[] _arr, int _level)
+    IEnumerator Card(int[] _arr, int _x, int _y)
     {
         for (int i = 0; i < _arr.Length; i++)
         {
             GameObject go = Instantiate(card, cards);
-
-            float x = (i % _level) * 1.8f;
-            float y = (i / _level) * 2.8f;
+            go.transform.localPosition = new Vector2(6.4f, 2.4f);
+            float x = (i % _x) * 1.8f;
+            float y = (i / _y) * 2.8f;
             go.GetComponent<Card>().Setting(_arr[i], new Vector2(x, y));
-
-            yield return new WaitForSeconds(0f);
-        }
-
-        //¸ðµç Ä«µå°¡ ÀÚ±â ÀÚ¸®¿¡ À§Â÷ÇÒ °æ¿ì, ¾Ö´Ï¸ÞÀÌ¼Ç ½ÇÇà
-        foreach(var card in cardList)
-        {
-            card.anim.enabled = true;
+            yield return new WaitForSeconds(0.1f);
         }
     }
 }

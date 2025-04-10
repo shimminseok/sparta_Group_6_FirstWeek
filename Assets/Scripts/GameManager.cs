@@ -10,28 +10,26 @@ public class GameManager : MonoBehaviour
     [SerializeField] Text timeTxt;
     [SerializeField] Text endTxt;
     [SerializeField] AnimationCurve animationCurve;
-
-
     [Header("Componenet")]
     [SerializeField] Animator timeAnimator;
     [SerializeField] StageChangeFadeUI fadeUI;
-    [SerializeField] int hiddenConditionCnt;
     [HideInInspector] public Card firstCard;
     [HideInInspector] public Card secondCard;
+
+
+    [SerializeField] int hiddenConditionCnt;
+
+
+
 
     bool isFirstWaring;
     int feiledMatchCnt = 0;
     float time = 0f;
+
+
+
     public int CardCount { get; private set; } = 0;
     public bool IsGameOver { get; private set; }
-
-    [Header("TimeSlider")]
-    [SerializeField] Slider timeSlider;
-    [SerializeField] Image sliderFill;
-    [SerializeField] Image pikachuIsCute;
-
-
-    // ��� �ִϸ��̼� Ʈ���ſ� �ִϸ�����
 
     bool isGameOver;
     private void Awake()
@@ -54,13 +52,11 @@ public class GameManager : MonoBehaviour
                 time = 40f;
                 break;
         }
+
+
         CardCount = LevelManager.Instance.GetCardCount() * 2;
-
         EnterStage(LevelManager.Instance.SelectedLevel);
-        timeSlider.maxValue = time;
     }
-
-    // Update is called once per frame
     void Update()
     {
 
@@ -82,7 +78,6 @@ public class GameManager : MonoBehaviour
             }
         }
         timeTxt.text = time.ToString("N2");
-        timeSlider.value = time;
     }
 
     public void isMatched()
@@ -100,6 +95,7 @@ public class GameManager : MonoBehaviour
                 Invoke(nameof(ClearGame), 1.5f);
             }
             AudioManager.Instance.PlaySFX(SFX.Match);
+            feiledMatchCnt = 0;
         }
         else
         {
@@ -107,8 +103,11 @@ public class GameManager : MonoBehaviour
             feiledMatchCnt++;
             firstCard.CloseCard();
             secondCard.CloseCard();
+            AudioManager.Instance.PlaySFX(SFX.UnMatch);
+            feiledMatchCnt++;
             if (feiledMatchCnt == hiddenConditionCnt && LevelManager.Instance.SelectedLevel != Level.Hidden)
             {
+                //���罺������ ����
                 StartCoroutine(EnterStage(Level.Hidden));
 
             }
@@ -132,13 +131,16 @@ public class GameManager : MonoBehaviour
             StartCoroutine(TextScaleTween(50, 300));
             StartCoroutine(TextRotationTween());
             endTxt.color = Color.yellow;
+            endTxt.text = "��������?!?!?!?\nŷ����?!?!?!";
         }
+        endTxt.gameObject.SetActive(true);
+        time = 0;
+        Time.timeScale = 0;
     }
     void ClearGame()
     {
         LevelManager.Instance.LevelUp();
         AdsInitializer.Instance.ShowAd();
-
         Time.timeScale = 0;
         PlayerPrefs.SetInt("ClearLevel", (int)LevelManager.Instance.SelectedLevel);
     }
@@ -152,31 +154,55 @@ public class GameManager : MonoBehaviour
 
     IEnumerator TextScaleTween(int _from, int _to)
     {
-        yield return null;
-        float timer = 0;
-        float lerpduration = 1f;
-        while (timer < lerpduration)
+        endTxt.fontSize = _from;
+        while (true)
         {
-            float percent = timer / lerpduration;
-
+            float timer = 0;
+            float lerpduration = 1f;
+            while (timer < lerpduration)
+            {
+                float percent = timer / lerpduration;
+                endTxt.fontSize = (int)Mathf.Lerp(_from, _to, animationCurve.Evaluate(percent));
+                timer += Time.unscaledDeltaTime;
+                yield return null;
+            }
+            timer = 0;
+            while (timer < lerpduration)
+            {
+                float percent = timer / lerpduration;
+                endTxt.fontSize = (int)Mathf.Lerp(_to, _from, percent);
+                timer += Time.unscaledDeltaTime;
+                yield return null;
+            }
             yield return null;
         }
     }
-
     IEnumerator TextRotationTween()
     {
 
-        float timer = 0;
-        float lerpduration = 0.5f;
-        while (timer < lerpduration)
+        Quaternion startRot = endTxt.rectTransform.localRotation;
+        Quaternion endRot = startRot * Quaternion.Euler(0f, 90f, 0f);
+        while (true)
         {
-            float percent = timer / lerpduration;
-
-            timer += Time.unscaledDeltaTime;
+            float timer = 0;
+            float lerpduration = 0.5f;
+            while (timer < lerpduration)
+            {
+                float percent = timer / lerpduration;
+                endTxt.rectTransform.rotation = Quaternion.Lerp(startRot, endRot, percent);
+                timer += Time.unscaledDeltaTime;
+                yield return null;
+            }
+            timer = 0;
+            while (timer < lerpduration)
+            {
+                float percent = timer / lerpduration;
+                endTxt.rectTransform.rotation = Quaternion.Lerp(endRot, startRot, percent);
+                timer += Time.unscaledDeltaTime;
+                yield return null;
+            }
             yield return null;
         }
 
-
-        yield return null;
     }
 }
