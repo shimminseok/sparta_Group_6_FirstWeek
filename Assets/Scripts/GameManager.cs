@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,8 +16,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] StageChangeFadeUI fadeUI;
     [HideInInspector] public Card firstCard;
     [HideInInspector] public Card secondCard;
-
-
     [SerializeField] int hiddenConditionCnt;
 
 
@@ -33,6 +30,9 @@ public class GameManager : MonoBehaviour
     public int CardCount { get; private set; } = 0;
     public bool IsGameOver { get; private set; }
 
+    [SerializeField] Animator timeAnimator;
+    bool isFirstWaring;
+    bool isGameOver;
     private void Awake()
     {
         if (Instance == null)
@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         AudioManager.Instance.ChangeBGM(LevelManager.Instance.SelectedLevel == Level.Hidden ? BGM.Hidden : BGM.InGame);
         switch (LevelManager.Instance.SelectedLevel)
+
         {
             case Level.MBTI:
                 time = 30f;
@@ -62,11 +63,8 @@ public class GameManager : MonoBehaviour
 
     }
     void Update()
-    {
-
+    { 
         time -= Time.deltaTime * (LevelManager.Instance.SelectedLevel == Level.Hidden ? 3 : 1);
-
-
         if (time <= 10)
         {
             if (!isFirstWaring)
@@ -137,15 +135,18 @@ public class GameManager : MonoBehaviour
             endTxt.color = Color.yellow;
             endTxt.text = "��������?!?!?!?\nŷ����?!?!?!";
         }
+
         endTxt.gameObject.SetActive(true);
         time = 0;
         Time.timeScale = 0;
+        AudioManager.Instance.ChangeBGM(BGM.Ending);
     }
 
     void ClearGame()
     {
         LevelManager.Instance.LevelUp();
         AdsInitializer.Instance.ShowAd();
+
         Time.timeScale = 0;
         PlayerPrefs.SetInt("ClearLevel", (int)LevelManager.Instance.SelectedLevel);
     }

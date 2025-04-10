@@ -11,16 +11,16 @@ public enum BGM
 }
 public enum SFX
 {
-    Flip,       //Ä«µå µÚÁýÀ»¶§ Sound
-    Match,   //Ä«µå ¸ÅÄ¡½Ã Sound
-    UnMatch, //Ä«µå ¸ÅÄ¡ ºÒ¹ß½Ã Sound
+    Flip,       //Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Sound
+    Match,   //Ä«ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ Sound
+    UnMatch, //Ä«ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½Ò¹ß½ï¿½ Sound
 }
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
     [Header("BGM")]
     [SerializeField] List<AudioClip> bgmClips;
-    [Header("È¿°úÀ½")]
+    [Header("È¿ï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] List<AudioClip> sfxClips;
 
     [SerializeField] AudioSource bgmPlayer;
