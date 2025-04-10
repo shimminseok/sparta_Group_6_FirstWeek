@@ -11,10 +11,8 @@ public class Board_1 : MonoBehaviour
     public List<Transform> infmRoot = new List<Transform>();
     public List<Card_1> infms = new List<Card_1>();
 
-    void Start()
-    {
-        SettingPos();
-    }
+    [SerializeField] GameObject nextTextObj;
+ 
     public void SettingPos()
     {
         for (int i = 0; i < infms.Count; i++)
@@ -88,6 +86,7 @@ public class Board_1 : MonoBehaviour
             card.transform.localRotation = Quaternion.Slerp(start, end, timer / duration);
             yield return null;
         }
+        nextTextObj.SetActive(true);
     }
 }
 

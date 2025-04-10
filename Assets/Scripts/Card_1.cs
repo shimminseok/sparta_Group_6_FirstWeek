@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,7 +15,8 @@ public class Card_1 : MonoBehaviour
 
     public void ChangeInfmSprite()
     {
-        currentSprite.sprite = infmSprites[(int)LevelManager.Instance.selectedLevel];
+        Debug.Log(LevelManager.Instance.SelectedLevel);
+        currentSprite.sprite = infmSprites[(int)LevelManager.Instance.SelectedLevel];
     }
     public void ChangeOriginSprite()
     {

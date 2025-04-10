@@ -102,6 +102,7 @@ public class GameManager : MonoBehaviour
 
         sliderFill.color = new Color(225 / 255f, 0, 0, 1f);
         pikachuIsCute.color = new Color(1f, 130 / 255f, 130 / 255f, 1f);
+        AudioManager.Instance.ChangeBGM(BGM.Warning);
     }
     public void isMatched()
     {
