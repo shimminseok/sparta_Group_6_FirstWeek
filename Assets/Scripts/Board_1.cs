@@ -15,6 +15,7 @@ public class Board_1 : MonoBehaviour
  
     public void SettingPos()
     {
+        AudioManager.Instance.ChangeBGM(BGM.Info);
         for (int i = 0; i < infms.Count; i++)
         {
             infms[i].gameObject.SetActive(true);
@@ -47,6 +48,7 @@ public class Board_1 : MonoBehaviour
 
     private IEnumerator MoveLerp(Transform target, Vector2 from, Vector2 to)
     {
+        AudioManager.Instance.PlaySFX(SFX.Info_CardFlip);
         float duration = 0.5f;
         float timer = 0f;
 

@@ -2183,10 +2183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba4a880ad2ba0244a9be099e4b7e79ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelUPSlots:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  isFirstStart: 0
 --- !u!4 &2069120953
 Transform:
   m_ObjectHideFlags: 0
