@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     [Header("Componenet")]
     [SerializeField] Animator timeAnimator;
     [SerializeField] StageChangeFadeUI fadeUI;
-    [SerializeField] Board_1 infoBoard;
+    [SerializeField] TeamMemberInfoBoard infoBoard;
     [HideInInspector] public Card firstCard;
     [HideInInspector] public Card secondCard;
 
@@ -41,6 +41,8 @@ public class GameManager : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
+
+
     }
     void Start()
     {
@@ -51,7 +53,6 @@ public class GameManager : MonoBehaviour
         CardCount = LevelManager.Instance.GetCardCount() * 2;
         timeSlider.maxValue = time;
         Time.timeScale = 1;
-
     }
     void SetInitialTime(Level _level)
     {
@@ -72,16 +73,22 @@ public class GameManager : MonoBehaviour
     void Update()
     {
 
+        //timeSlider 조금 늦게 실행시키고 싶어.
         HandleTimer();
+
+        time += Time.deltaTime;
+
         timeSlider.value = time;
         timeTxt.text = time.ToString("N2");
+
     }
     void HandleTimer()
     {
         float multiplier = LevelManager.Instance.SelectedLevel == Level.Hidden ? 3 : 1;
+        // Hidden스테이지는 난이도에 차별을 두기위해서 시간을 3배 빠르게 진행시키도록 하였다.
         time -= Time.deltaTime * multiplier;
 
-        if (time <= 10f)
+        if (time <= 10f) //10초 이하로 남았을때
         {
             if (!isFirstWarning)
             {
@@ -94,6 +101,9 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+    /// <summary>
+    /// trigger가 계속 되서 좀 오류가 발생해서 bool형을 만들어서 최초 위험상태 진입시에만 Animator와 TimeSlider의 색깔 및 시간초의 색깔을 변경시켜준다.
+    /// </summary>
     void TriggerLowTimeWarning()
     {
         isFirstWarning = true;
@@ -139,6 +149,12 @@ public class GameManager : MonoBehaviour
 
     void EndGame()
     {
+        //엔드게임 함수에선 BGM을 바꿔주고 EndingBGM으로
+        // timeScale을 0으로 만들어 게임을 정지시켜줌
+        // endTxt의 오브젝트를 활성화 시켜서 EndText가 출력되게 하고
+        //Time.Deleta으로 줄여주니까 time = 0으로 고정
+        //현재 레벨이 Hidden이 아니다.
+        //
         AudioManager.Instance.ChangeBGM(BGM.Ending);
         Time.timeScale = 0;
         endTxt.gameObject.SetActive(true);
@@ -146,13 +162,18 @@ public class GameManager : MonoBehaviour
         if (LevelManager.Instance.SelectedLevel != Level.Hidden)
         {
             endTxt.color = Color.black;
+            endTxt.text = "다시 하시조?!";
         }
         else
         {
+            //MBTI 레벨로 돌아감
             LevelManager.Instance.ChangeLevel(Level.MBTI);
             endTxt.color = Color.yellow;
-            StartCoroutine(TextScaleTween(50, 300));
-            StartCoroutine(TextRotationTween());
+
+            //
+            StartCoroutine(TextScaleTween(50, 300)); //텍스트 크기 담당.
+            StartCoroutine(TextRotationTween()); //텍스트 회전 담당
+            //
             endTxt.text = "못깨겠조?!?!?\n킹받조?!?!?!";
         }
     }
@@ -178,10 +199,10 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator TextScaleTween(int _from, int _to)
     {
-        float duration = 1f;
+        float duration = 1f; //1초동안 실행해라
         while (true)
         {
-            yield return TweenFontSize(_from, _to, duration);
+            yield return TweenFontSize(_from, _to, duration); // TweenFontSize 코루틴이 실행이 끝날때까지 
             yield return TweenFontSize(_to, _from, duration);
         }
     }
@@ -191,7 +212,7 @@ public class GameManager : MonoBehaviour
         while (timer < _duration)
         {
             float percent = timer / _duration;
-            endTxt.fontSize = (int)Mathf.Lerp(_from, _to, animationCurve.Evaluate(percent));
+            endTxt.fontSize = (int)Mathf.Lerp(_from, _to, animationCurve.Evaluate(percent)); // 0~ 1
             timer += Time.unscaledDeltaTime;
             yield return null;
         }
@@ -199,7 +220,8 @@ public class GameManager : MonoBehaviour
     IEnumerator TextRotationTween()
     {
         Quaternion startRot = endTxt.rectTransform.localRotation;
-        Quaternion endRot = startRot * Quaternion.Euler(0f, 90f, 0f);
+        Quaternion endRot = startRot * Quaternion.Euler(0f, 90f, 0f); // 수학적인 거라서 //Euler로 짐벌락? 회전각이 서로 겹치는 현상을 짐벌락 이라고함. 근데 쿼터니언은 그걸 방지해줌 그래서 유니티는 쿼터니언
+        //쿼터니언 단점이 계산이 하기가 졸라 어려워요.
 
         float duration = 0.5f;
 

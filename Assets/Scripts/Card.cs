@@ -85,8 +85,6 @@ public class Card : MonoBehaviour
             time += Time.deltaTime;
             yield return null;
         }
-
-        // 마지막 위치 정확히 고정
         transform.localPosition = _to;
     }
 }

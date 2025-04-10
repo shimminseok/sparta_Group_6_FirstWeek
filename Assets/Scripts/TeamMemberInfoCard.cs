@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Card_1 : MonoBehaviour
+public class TeamMemberInfoCard : MonoBehaviour
 {
     public SpriteRenderer currentSprite;
     public List<Sprite> infmSprites;
