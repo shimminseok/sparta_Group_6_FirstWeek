@@ -101,8 +101,12 @@ public class AdsInitializer : MonoBehaviour, IUnityAdsInitializationListener, IU
             if (!GameManager.Instance.IsGameOver)
                 LevelManager.Instance.LevelUp();
 
+<<<<<<< HEAD
             
             LoadSceneManager.Instance.LoadScene(SceneType.StartScene);
+=======
+            SceneManager.LoadScene("StartScene");
+>>>>>>> parent of 63a16ba (style : 코드 수정 및 클래스 이름 변경)
         }
     }
 }
