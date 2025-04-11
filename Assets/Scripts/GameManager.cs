@@ -164,8 +164,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            //MBTI 레벨로 돌아감
-            LevelManager.Instance.ChangeLevel(Level.MBTI);
+            //이전 레벨로 돌아감
+            LevelManager.Instance.ChangeLevel(LevelManager.Instance.PrevLevel);
             endTxt.color = Color.yellow;
 
             //

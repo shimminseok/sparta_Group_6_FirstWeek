@@ -17,7 +17,7 @@ public class LevelManager : MonoBehaviour
     public static LevelManager Instance { get; private set; }
 
     public Level SelectedLevel { get; private set; } = Level.MBTI;
-
+    public Level PrevLevel { get; private set; }
     int[] CardCountArray = new int[4] { 3, 6, 9, 12 };
 
     public bool isFirstStart;
@@ -55,12 +55,13 @@ public class LevelManager : MonoBehaviour
         SelectedLevel += 1;
         if(SelectedLevel >= Level.Hidden)
         {
-            SelectedLevel = Level.MBTI;
+            SelectedLevel = Level.Resolution;
         }
     }
 
     public void ChangeLevel(Level _level)
     {
+        PrevLevel = SelectedLevel;
         SelectedLevel = _level;
 
     }
