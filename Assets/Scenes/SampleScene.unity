@@ -226,7 +226,7 @@ MonoBehaviour:
   timeSlider: {fileID: 6536072164227997970}
   sliderFill: {fileID: 938911086385158488}
   pikachuIsCute: {fileID: 6374619997605802295}
-  hiddenConditionCnt: 3
+  hiddenConditionCnt: 5
 --- !u!4 &212220230
 Transform:
   m_ObjectHideFlags: 0
@@ -1132,9 +1132,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1378781233}
-        m_TargetAssemblyTypeName: AdsInitializer, Assembly-CSharp
-        m_MethodName: ShowAd
+      - m_Target: {fileID: 833100721}
+        m_TargetAssemblyTypeName: RewardedBtn, Assembly-CSharp
+        m_MethodName: OnClickRewardBtn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

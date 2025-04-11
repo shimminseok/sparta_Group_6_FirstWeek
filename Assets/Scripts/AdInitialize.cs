@@ -16,7 +16,7 @@ public class AdsInitializer : MonoBehaviour, IUnityAdsInitializationListener, IU
     string _adUnitId = null; // This will remain null for unsupported platforms
     void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
         }
@@ -98,8 +98,11 @@ public class AdsInitializer : MonoBehaviour, IUnityAdsInitializationListener, IU
             Debug.Log("Unity Ads Rewarded Ad Completed");
             // Grant a reward. 
             LoadAd();
-            LevelManager.Instance.LevelUp();
-            SceneManager.LoadScene("SampleScene");
+            if (!GameManager.Instance.IsGameOver)
+                LevelManager.Instance.LevelUp();
+
+            
+            LoadSceneManager.Instance.LoadScene(SceneType.StartScene);
         }
     }
 }
