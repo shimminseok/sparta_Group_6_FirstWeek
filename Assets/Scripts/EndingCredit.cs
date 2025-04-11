@@ -8,6 +8,7 @@ public class EndingCredit : MonoBehaviour
     void Start()
     {
         AudioManager.Instance.ChangeBGM(BGM.Ending);
+        Time.timeScale = 1f;
     }
 
 
@@ -17,7 +18,14 @@ public class EndingCredit : MonoBehaviour
         transform.position += (Vector3.up * Time.deltaTime * spd);
         if (transform.position.y > 2500)
         {
-            Destroy(gameObject);
+            Invoke(nameof(DestroyEndingCredit), 3f);
         }
+    }
+
+
+
+    void DestroyEndingCredit()
+    {
+        LoadSceneManager.Instance.LoadScene(SceneType.StartScene);
     }
 }

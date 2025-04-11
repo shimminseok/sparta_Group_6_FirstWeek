@@ -124,6 +124,7 @@ public class GameManager : MonoBehaviour
 
             if (CardCount == 0)
             {
+                timeAnimator.gameObject.SetActive(false);
                 Invoke(nameof(ClearGame), 1.5f);
             }
             AudioManager.Instance.PlaySFX(SFX.Match);
