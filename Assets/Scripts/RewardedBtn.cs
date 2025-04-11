@@ -12,6 +12,7 @@ public class RewardedBtn : MonoBehaviour
     {
         if (LevelManager.Instance.SelectedLevel == Level.Resolution)
         {
+            
             LoadSceneManager.Instance.LoadScene(SceneType.EndingScene);
         }
         else
