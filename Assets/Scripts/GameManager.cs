@@ -73,10 +73,6 @@ public class GameManager : MonoBehaviour
     {
 
         HandleTimer();
-<<<<<<< HEAD
-
-=======
->>>>>>> parent of 63a16ba (style : 코드 수정 및 클래스 이름 변경)
         timeSlider.value = time;
         timeTxt.text = time.ToString("N2");
     }
@@ -154,12 +150,9 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-<<<<<<< HEAD
             //이전 레벨로 돌아감
             LevelManager.Instance.ChangeLevel(LevelManager.Instance.PrevLevel);
-=======
             LevelManager.Instance.ChangeLevel(Level.MBTI);
->>>>>>> parent of 63a16ba (style : 코드 수정 및 클래스 이름 변경)
             endTxt.color = Color.yellow;
             StartCoroutine(TextScaleTween(50, 300));
             StartCoroutine(TextRotationTween());

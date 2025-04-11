@@ -39,13 +39,7 @@ public class LevelManager : MonoBehaviour
 
     public void OnClickLevel()
     {
-<<<<<<< HEAD
         LoadSceneManager.Instance.LoadScene(SceneType.InGameScene);
-
-=======
-        ChangeLevel((Level)_level);
-        SceneManager.LoadScene("SampleScene");
->>>>>>> parent of 63a16ba (style : 코드 수정 및 클래스 이름 변경)
     }
     public int GetCardCount()
     {
