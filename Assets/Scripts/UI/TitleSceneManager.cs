@@ -21,8 +21,6 @@ public class TitleSceneManager : MonoBehaviour
 
     private void Start()
     {
-
-
         OpenLevelUpSlot();
     }
 

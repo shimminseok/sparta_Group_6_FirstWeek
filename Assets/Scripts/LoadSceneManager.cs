@@ -24,16 +24,6 @@ public class LoadSceneManager : MonoBehaviour
         else if (Instance != this)
             Destroy(gameObject);
     }
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void LoadScene(SceneType _scene)
     {

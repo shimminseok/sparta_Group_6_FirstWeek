@@ -38,9 +38,8 @@ public class LevelManager : MonoBehaviour
         isFirstStart = true;
     }
 
-    public void OnClickLevel(int _level)
+    public void OnClickLevel()
     {
-        ChangeLevel((Level)_level);
         LoadSceneManager.Instance.LoadScene(SceneType.InGameScene);
 
     }
@@ -53,7 +52,7 @@ public class LevelManager : MonoBehaviour
     public void LevelUp()
     {
         SelectedLevel += 1;
-        if(SelectedLevel >= Level.Hidden)
+        if (SelectedLevel >= Level.Hidden)
         {
             SelectedLevel = Level.Resolution;
         }
@@ -61,7 +60,9 @@ public class LevelManager : MonoBehaviour
 
     public void ChangeLevel(Level _level)
     {
-        PrevLevel = SelectedLevel;
+        if (_level != Level.Hidden)
+            PrevLevel = SelectedLevel;
+
         SelectedLevel = _level;
 
     }
