@@ -164,8 +164,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            //MBTI 레벨로 돌아감
-            LevelManager.Instance.ChangeLevel(Level.MBTI);
+            //이전 레벨로 돌아감
+            LevelManager.Instance.ChangeLevel(LevelManager.Instance.PrevLevel);
             endTxt.color = Color.yellow;
 
             //
@@ -192,7 +192,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            LevelManager.Instance.OnClickLevel((int)_level);
+            LevelManager.Instance.OnClickLevel();
         }
     }
     IEnumerator TextScaleTween(int _from, int _to)

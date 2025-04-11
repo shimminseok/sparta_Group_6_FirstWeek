@@ -10,6 +10,13 @@ public class RewardedBtn : MonoBehaviour
 {
     public void OnClickRewardBtn()
     {
-        AdsInitializer.Instance.ShowAd();
+        if (LevelManager.Instance.SelectedLevel == Level.Resolution)
+        {
+            LoadSceneManager.Instance.LoadScene(SceneType.EndingScene);
+        }
+        else
+        {
+            AdsInitializer.Instance.ShowAd();
+        }
     }
 }

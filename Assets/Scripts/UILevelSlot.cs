@@ -19,7 +19,10 @@ public class UILevelSlot : MonoBehaviour
     public void OnClickLevelBtn()
     {
         if (isOpenStage)
-            LevelManager.Instance.OnClickLevel((int)level);
+        {
+            LevelManager.Instance.ChangeLevel(level);
+            LevelManager.Instance.OnClickLevel();
+        }
     }
     public void OpenCard()
     {
