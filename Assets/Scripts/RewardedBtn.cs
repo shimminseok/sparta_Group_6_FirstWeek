@@ -10,7 +10,7 @@ public class RewardedBtn : MonoBehaviour
 {
     public void OnClickRewardBtn()
     {
-        if (LevelManager.Instance.SelectedLevel == Level.Resolution)
+        if (LevelManager.Instance.SelectedLevel == Level.Resolution && !GameManager.Instance.IsGameOver)
         {
             
             LoadSceneManager.Instance.LoadScene(SceneType.EndingScene);
