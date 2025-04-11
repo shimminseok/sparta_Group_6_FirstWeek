@@ -192,7 +192,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            LevelManager.Instance.OnClickLevel((int)_level);
+            LevelManager.Instance.OnClickLevel();
         }
     }
     IEnumerator TextScaleTween(int _from, int _to)

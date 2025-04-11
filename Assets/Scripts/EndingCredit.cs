@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EndingCredit : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] float spd;
     void Start()
     {
         AudioManager.Instance.ChangeBGM(BGM.Ending);
@@ -14,7 +14,7 @@ public class EndingCredit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position += Vector3.up;
+        transform.position += (Vector3.up * Time.deltaTime * spd);
         if (transform.position.y > 2500)
         {
             Destroy(gameObject);
