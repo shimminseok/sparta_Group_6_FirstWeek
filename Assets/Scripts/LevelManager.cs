@@ -16,7 +16,7 @@ public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance { get; private set; }
 
-    public Level SelectedLevel { get; private set; } = Level.MBTI;
+    public Level SelectedLevel /*{ get; private set; }*/ = Level.MBTI;
     public Level PrevLevel { get; private set; }
     int[] CardCountArray = new int[4] { 3, 6, 9, 12 };
 

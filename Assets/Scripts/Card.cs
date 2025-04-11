@@ -16,6 +16,7 @@ public class Card : MonoBehaviour
     [SerializeField] Vector2 OpenCardOffset = new Vector2();
     [SerializeField] AnimationCurve animationCurve;
 
+    bool isClick;
     public void Setting(int _num, Vector2 _endPos)
     {
         idx = _num;
@@ -25,6 +26,10 @@ public class Card : MonoBehaviour
 
     public void OpenCard()
     {
+        if (isClick)
+            return;
+
+        isClick = true;
         AudioManager.Instance.PlaySFX(SFX.Flip);
         StartCoroutine(CardOpenEffect());
         if (GameManager.Instance.firstCard == null)
@@ -73,6 +78,8 @@ public class Card : MonoBehaviour
         back.SetActive(false);
 
         yield return MoveCard(endPos, start);
+
+        isClick = false;
     }
     IEnumerator MoveCard(Vector2 _from, Vector2 _to)
     {
